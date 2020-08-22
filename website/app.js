@@ -16,7 +16,7 @@ const baseUrl = 'api.openweathermap.org/data/2.5/weather?zip=';
     @description Hold reference to my open weather map api key.
 */
 
-const apiKey='8a859a3628cb56d91dc6e5df75ee32d6';
+const  apiKey=select("#api");
 
 
 /** @constant
@@ -122,7 +122,7 @@ getDate = ()=> { return `${currentDate()} ${currentTime()}`}
 * @param {string} zip
 * @returns {string} Complete url to the open weather map api with zip code and api key
 */
-fullUrl = zip =>{return`https://${baseUrl}${zip},us&appid=${apiKey}&units=metric`;}
+fullUrl = zip =>{return`https://${baseUrl}${zip},us&appid=${text(apiKey)}&units=metric`;}
 
 /**
 * @function  getIconById
