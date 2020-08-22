@@ -10,10 +10,18 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 <link rel="stylesheet" href="style.css">
 
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.3/css/ol.css" type="text/css">
+    <style>
+      .map {
+        height: 400px;
+        width: 100%;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.3/build/ol.js"></script>
 </head>
  <body>
 <div class="container">
-
   <form>
 
     <div class="form-group">
@@ -29,20 +37,26 @@
       <label for="feelings">How are you feeling today?</label>
       <textarea class="form-control" id="feelings"  placeholder="Enter your feelings here"></textarea>
     </div>
-    <input type="button" id="generate" class="btn btn-primary" value="Generate">  </input>
+    <input type="button" id="get" class="btn btn-primary" value="Get Data">  </input>
   </form>
-  <hr>
- 
-  <div class ="bg-info text-white">
 
-    <div class = "card-header">Most Recent Entry</div>
+  <hr>
+  <div class ="card bg-info text-white" style="width: 50%">
+   <h4 class = "card-title">Most Recent Entry</h4>
    <div id = "card-body">
+   <img id="flag" src="">
    <div id = "date"></div> 
    <div id = "temp"></div>
    <div id = "content"></div>
+   
+   <div id="map" class="map"></div>
+   <script type="text/javascript">
+     
+   </script>
   </div>
-  
+
   </div>
+  <hr>
 
 
   </div>

@@ -10,21 +10,33 @@
 */
 const baseUrl = 'api.openweathermap.org/data/2.5/weather?zip=';
 
+/** @type {object}
+    @global
+    @description Hold reference coordinate oject.
+*/
+let coord = '';
+
 /** @constant
     @type {string}
     @global
     @description Hold reference to my open weather map api key.
 */
-
 const  apiKey=select("#api");
 
 
 /** @constant
     @type {object}
     @global
+    @description Hold refrence to flag image element.
+*/
+const  flag=select("#flag");
+
+/** @constant
+    @type {object}
+    @global
     @description Hold reference to generate button html element.
 */
-const generateButton = select('#generate');
+const getButton = select('#get');
 
 /** @constant
     @type {object}
@@ -97,6 +109,38 @@ let  headers = {
 */
 changeDivInnerHTML = (ele,prefix,text)=>{ele.innerHTML=`${prefix}:${text}`;}
 
+
+/**
+* @function  getFlatCountrFlageByCountryCode
+* @description set the image element href to the approiate country href from country api
+* @param {string} code
+* @param {object} imageElement
+* @param {string} style
+*/
+getCountryFlageByCountryCodeAndStyle =( imageElement,code,style )=> {
+    imageElement.src = `https://www.countryflags.io/${code}/${style}/64.png`;
+}
+
+
+intilizeMap = coord => {
+    console.log(coord);
+    var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          })
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([coord.lon, coord.lat]),
+          zoom: 10
+        })
+      });
+
+}
+
+
+
 /**
 * @function  select
 * @description Return object selected by querySelector specified by the query 
@@ -130,7 +174,7 @@ fullUrl = zip =>{return`https://${baseUrl}${zip},us&appid=${text(apiKey)}&units=
 * @param {string} id
 * @returns {string} Url of the image on the open weather map
 */
-getIconById = id =>{return `http://openweathermap.org/img/wn/${id}@2x.png`;}
+getIconById = id =>{return `http://openweathermap.org/img/wn/${id}.png`;}
 
 
 /**
@@ -225,9 +269,14 @@ getWeatherDataFromOpenWeartherApi = async url => {
     const response = await fetch(url);
     try{
        const data = await response.json();
+       console.log(data);
+
+       getCountryFlageByCountryCodeAndStyle(flag, data.sys.country,'flat');
+
+       intilizeMap(data.coord);
        changeFavIconById(data.weather[0].icon);
-       changeTitle(data.weather[0].main);
-       changeDivInnerHTML(temp,'temp',data.main.temp);
+       changeDivInnerHTML(temp,'temp ',data.main.temp+" &#8451;");
+
        return {date:getDate(),temp:data.main.temp+'',content:text(feelingInput)};
 
     }catch(error){
@@ -236,45 +285,6 @@ getWeatherDataFromOpenWeartherApi = async url => {
 }
 
 
- /**
-* @async
-* @function  postDataToServer
-* @description Return the text value of any input element specified in the parameter 
-* @param {string} url for post action usualy the destination is local node server
-* @param {object} data for post action body 
-*/
-postDataToServer = async (url , data) => {
-    headers.body=JSON.stringify(data);
-    const response = await fetch(url,headers);
-    try{
-       const data = response.json();
-    }catch(error){
-        alert(error);
-    }
-}
-
-
- /**
-* @async 
-* @function  getDataFromNodeLocalServer
-* @description Return the text value of any input element specified in the parameter 
-* @param {string} url for get action usually the open weather map api call to get temprature 
-* @returns {object} Consisted of three value date, temperature and finally feeling of the user
-*/
-getDataFromNodeLocalServer =async  url =>{
-    const response = await fetch(url);
-    try{
-       const data = await response.json();
-       log('data',data);
-       changeDivInnerHTML(date,'Date',data.date);
-       changeDivInnerHTML(content,'Feeling',data.content);
-       changeDivInnerHTML(temp,'Temp',data.temp);
-
-    }catch(error){
-        alert(error);
-    }
-}
-
 /**
  * End Main Functions
  * Begin Events
@@ -282,9 +292,9 @@ getDataFromNodeLocalServer =async  url =>{
 */
 
 /**
- * @description Handle on generate button click event
+ * @description Handle on get button click event
  */
-generateButton.addEventListener('click',() => {
+getButton.addEventListener('click',() => {
     if(! checkInputFields()){
         getWeatherDataFromOpenWeartherApi(fullUrl(text(zipInput)))
       /*  .then(function (x){
