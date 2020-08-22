@@ -18,26 +18,23 @@
     <label for="zip">Zip Code:</label>
     <input type="text" class="form-control" placeholder="enter zip code here" id="zip">
     </div>
-
-
     <div class="form-group">
       <label for="feelings">How are you feeling today?</label>
       <textarea class="form-control" id="feelings"  placeholder="Enter your feelings here"></textarea>
-      </div>
-
-
+    </div>
+    <input type="button" id="generate" class="btn btn-primary" value="Generate">  </input>
   </form>
-  <button id="generate" class="btn btn-primary"> Generate </button>
+  <hr>
  
-  <div class ="holder entry row">
-    <div class="col">
-    <div class = "title">Most Recent Entry</div>
-   <div id = "entryHolder">
+  <div class ="bg-info text-white">
+
+    <div class = "card-header">Most Recent Entry</div>
+   <div id = "card-body">
    <div id = "date"></div> 
    <div id = "temp"></div>
    <div id = "content"></div>
   </div>
-  </div>
+  
   </div>
 
 
