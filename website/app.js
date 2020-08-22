@@ -286,11 +286,11 @@ getDataFromNodeLocalServer =async  url =>{
  */
 generateButton.addEventListener('click',() => {
     if(! checkInputFields()){
-        getWeatherDataFromOpenWeartherApi(fullUrl(text(zipInput))).
-        then(function (x){
+        getWeatherDataFromOpenWeartherApi(fullUrl(text(zipInput)))
+      /*  .then(function (x){
             postDataToServer(localhostBaseUrl+'/addData',{date:x.date,temp:x.temp,content:x.content});})
         .then(function (){
-            getDataFromNodeLocalServer(localhostBaseUrl+'/getData');});}
+        getDataFromNodeLocalServer(localhostBaseUrl+'/getData');});*/}
     else{
         alert('Make Sure All Required Field Is Not Empty');
 }
