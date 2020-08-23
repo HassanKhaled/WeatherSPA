@@ -3,6 +3,21 @@
  *
 */
 
+
+map = new OpenLayers.Map("mapdiv");
+map.addLayer(new OpenLayers.Layer.OSM());
+
+/** @constant
+    @type {array}
+    @global
+    @description Hold months' names .
+*/
+
+const months= ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
+
+
 /** @constant
     @type {string}
     @global
@@ -31,6 +46,15 @@ const  apiKey=select("#api");
 */
 const  flag=select("#flag");
 
+
+/** @constant
+    @type {object}
+    @global
+    @description Hold refrence current weather description.
+*/
+const  description=select("#des");
+
+
 /** @constant
     @type {object}
     @global
@@ -44,13 +68,6 @@ const getButton = select('#get');
     @description Hold reference to zip code input text.
 */
 const zipInput =select('#zip');
-
-/** @constant
-    @type {object}
-    @global
-    @description Hold reference to feelings textarea where use iput current feeling.
-*/
-const feelingInput=select('#feelings');
 
 /** @constant
     @type {string}
@@ -74,12 +91,6 @@ const date = select('#date');
 */
 const temp = select('#temp');
 
-/** @constant
-    @type {object}
-    @global
-    @description Hold reference to content div.
-*/
-const content =select('#content');
 
 /** @constant
     @type {object}
@@ -107,7 +118,7 @@ let  headers = {
 * @param {string} prefix
 * @param {string} test
 */
-changeDivInnerHTML = (ele,prefix,text)=>{ele.innerHTML=`${prefix}:${text}`;}
+changeDivInnerHTML = (ele,text)=>{ele.innerHTML=`${text}`;}
 
 
 /**
@@ -123,20 +134,27 @@ getCountryFlageByCountryCodeAndStyle =( imageElement,code,style )=> {
 
 
 intilizeMap = coord => {
-    console.log(coord);
-    var map = new ol.Map({
-        target: 'map',
-        layers: [
-          new ol.layer.Tile({
-            source: new ol.source.OSM()
-          })
-        ],
-        view: new ol.View({
-          center: ol.proj.fromLonLat([coord.lon, coord.lat]),
-          zoom: 10
-        })
-      });
+let x =document.getElementById('mapdiv').children.length;
 
+if(true){
+    
+
+    var lonLat = new OpenLayers.LonLat( coord.lon ,coord.lat)
+          .transform(
+            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+            map.getProjectionObject() // to Spherical Mercator Projection
+          );
+          
+    var zoom=14;
+
+    var markers = new OpenLayers.Layer.Markers( "Markers" );
+    map.addLayer(markers);
+    
+    markers.addMarker(new OpenLayers.Marker(lonLat));
+    
+    map.setCenter (lonLat, zoom);
+
+          }
 }
 
 
@@ -201,7 +219,7 @@ log = (title,msg) => {console.log(title,msg);}
 * @returns {bool}  Resluts of check true some filed is empty otherwise false
 */
 checkInputFields = () => {
-    if(text(zipInput)===''||text(feelingInput)===''){
+    if(text(zipInput)===''){
         return true;
     }else{
         return false;
@@ -242,6 +260,26 @@ currentDate = () => {
     return `${now.getDate()}\\${(now.getMonth()+1)}\\${now.getFullYear()}`
  }
 
+/**
+* @function  getCurrentMonthName
+* @description returns the name of the current month 
+* @returns {string} Name of the current month shortend into 3 letters 
+*/
+getCurrentMonthName= () => {
+    const now = new Date();
+    return `${months[now.getMonth()]}`
+ }
+
+
+ /**
+* @function  getCurrentDay
+* @description Returns current day of the month
+* @returns {string} Current day of the month  
+*/
+getCurrentDay = () => {
+    const now = new Date();
+    return `${now.getDate()}`
+ }
 
  /**
 * @function  currentTime
@@ -250,6 +288,16 @@ currentDate = () => {
 */
 currentTime = () => {const now = new Date();
     return `${now.getHours()}:${now.getMinutes()+1}:${now.getSeconds()}`
+}
+
+/**
+* @function  changeInenerHTMLContentById
+* @description Change the innner HTML content of an element 
+* @param {string}  content for changing the current inner contnet of the element
+* @param {string}  id of the element we want to change it's innerHTMl contern
+*/
+changeInenerHTMLContentById = (content,id) => {
+    document.getElementById(id).innerHTML=content;
 }
 
 /**
@@ -272,18 +320,61 @@ getWeatherDataFromOpenWeartherApi = async url => {
        console.log(data);
 
        getCountryFlageByCountryCodeAndStyle(flag, data.sys.country,'flat');
+       
 
+       let current = data.main;
        intilizeMap(data.coord);
        changeFavIconById(data.weather[0].icon);
-       changeDivInnerHTML(temp,'temp ',data.main.temp+" &#8451;");
+       changeDivInnerHTML(temp,current.temp+" &#8451;");
+       changeDivInnerHTML(description,data.weather[0].description);
+       changeDivInnerHTML(date,`${getCurrentMonthName()}, ${getCurrentDay()}`);
+       changeInenerHTMLContentById(`${data.name},${data.sys.country}`,'loc');
+       changeInenerHTMLContentById(data.wind.speed,'wind');
+       changeInenerHTMLContentById(data.wind.deg,'dir');
+       changeInenerHTMLContentById(current.humidity,'hum')
+       changeInenerHTMLContentById(current.pressure,'pre')
 
-       return {date:getDate(),temp:data.main.temp+'',content:text(feelingInput)};
+
+       changeInenerHTMLContentById(current.feels_like+" &#8451;",'like')
+       changeInenerHTMLContentById(current.temp_min+" &#8451;",'min')
+       changeInenerHTMLContentById(current.temp_max+" &#8451;",'max')
+
 
     }catch(error){
         alert(error);
     }
 }
 
+
+update = () =>{
+    let now = new Date();
+
+    let time ='';
+    let h = now.getHours();
+    let m =now.getMinutes();
+    let s =now.getSeconds();
+    
+    if(h>=12){
+        time="PM";
+    }else{
+        time="AM";
+    }
+
+
+
+    document.getElementById('date').innerHTML=checkDigits(h)+' '+checkDigits(m)+' '+checkDigits(s)+' '+time;
+
+}
+
+checkDigits = (digit)=>{
+
+    if(digit<10)
+        return '0'+digit;
+    else
+        return digit;
+}
+
+//setInterval(update, 500);
 
 /**
  * End Main Functions
@@ -297,10 +388,7 @@ getWeatherDataFromOpenWeartherApi = async url => {
 getButton.addEventListener('click',() => {
     if(! checkInputFields()){
         getWeatherDataFromOpenWeartherApi(fullUrl(text(zipInput)))
-      /*  .then(function (x){
-            postDataToServer(localhostBaseUrl+'/addData',{date:x.date,temp:x.temp,content:x.content});})
-        .then(function (){
-        getDataFromNodeLocalServer(localhostBaseUrl+'/getData');});*/}
+    }
     else{
         alert('Make Sure All Required Field Is Not Empty');
 }

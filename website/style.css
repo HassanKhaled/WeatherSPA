@@ -1,15 +1,35 @@
 body{
     
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  
+    background: #111;
+}
+
+input[type=text] {
+    background-color: #555;
+    color:#eee;
+    border:solid 1px #777;
+}
+h1,
+h2,
+h3,
+h4,
+h5{
+    color: #eee;
 }
 
 
 
+input[type=text]:focus {
+    background-color: #555;
+    color:#eee;
+    border:solid #eee 0.5px;
+}
+
+
 .container{
 
-    background:#f23557; 
-    color: #f0d43a;
+    background:#333; 
+    color: #fff;
 }
 
 .entry{
