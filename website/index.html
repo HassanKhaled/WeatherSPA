@@ -25,28 +25,46 @@
 <div class="container">
   <form>
 
-    <div class="form-group">
-      <label for="api">Api Key:</label>
-      <input type="text" class="form-control" placeholder="enter api key here" id="api">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Api Key</span>
       </div>
-
-    <div class="form-group">
-    <label for="zip">Zip Code:</label>
-    <input type="text" class="form-control" placeholder="enter zip code here" id="zip">
+      <input type="text" class="form-control" placeholder="enter api key here"  id="api" >
     </div>
 
-    <div class="form-group">
-      <label for="zip">City Name:</label>
-      <input type="text" class="form-control" placeholder="enter city name here" id="city">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Zip Code</span>
       </div>
+      <input type="text" class="form-control" placeholder="enter zip code here"  id="zip" >
+    </div>
+
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">City Name</span>
+      </div>
+      <input type="text" class="form-control" placeholder="enter city name here"  id="city" >
+    </div>
+
   
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Location</span>
+        </div>
+        <input type="text" class="form-control" placeholder="enter Longitude here"  id="lon" >
+        <input type="text" class="form-control" placeholder="enter Latitude here"  id="lat">
+        <div class="input-group-append">
+          <button class="btn btn-light" id="fill" >Fill</button>
+        </div>
+      </div>
 
-    <input type="button" id="get" class="btn  btn-light btn-block" value="Get Data">  </input>
+
+    <input type="button" id="get" class="btn  btn-light btn-block" value="Get Data"></input>
   </form>
-
   <hr>
 
- 
+ <div id="content" >
   <div class="row">
     <div class="col-4"><div id="mapdiv" class="map"></div></div>
     
@@ -58,20 +76,18 @@
       <div > <h4>Max <div id = "min"></div></h4> </div>
       <div > <h4>Min <div id = "max"></div></h4> </div>
       <hr>
-
     </div>
 
 
     <div class="col-3"><h4>Wind Speed <i class="fas fa-wind"></i><div id="wind"></div></h4>
     <hr>
-    <h4>  Direction <i class="far fa-compass"></i><div id="dir"></div> </h4>
+    <h4> Direction <i class="far fa-compass"></i><div id="dir"></div> </h4>
     <hr>
     <h4> Humadity <i class="fas fa-tint"></i><div id="hum"></div> </h4>
     <hr>
     <h4> Pressure <i class="fas fa-thermometer-full"></i><div id="pre"></div> </h4>
     <hr>
     </div>
-
 
     <div class="col-2">
       <div > <h4><div id = "date"></div></h4></div>
@@ -80,30 +96,15 @@
       <img id="flag" src="">
     </div>
     <div class="col-1"></div>
-  
-
   </div>
 
 
- <hr>
- <div class="row">
-  <div class=col-3> </div>
-  <div class=col-3> </div>
-  <div class=col-3> </div>
-  <div class=col-3> </div>
-</div>
+
+ </div>
+
+ 
+
 <hr>
- 
-
-  
- 
-
-
-
-  
-  <hr>
-
-
   </div>
 <!-- Open Layer Maps Javascript Code -->  
 <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
