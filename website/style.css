@@ -25,11 +25,23 @@ input[type=text]:focus {
     border:solid #eee 0.5px;
 }
 
+#content{
+    background-color: #999;
+    border-radius: 2px;
+    color: #eee;
+
+}
 
 .container{
 
     background:#333; 
     color: #fff;
+}
+
+.input-group-text{
+    background: #999;
+    color:#eee;
+    border:solid 1px #777;
 }
 
 .entry{

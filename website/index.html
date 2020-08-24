@@ -22,7 +22,9 @@
     <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.4/build/ol.js"></script>
 </head>
  <body>
+ 
 <div class="container">
+
   <form>
 
     <div class="input-group mb-3">
@@ -30,6 +32,9 @@
         <span class="input-group-text">Api Key</span>
       </div>
       <input type="text" class="form-control" placeholder="enter api key here"  id="api" >
+      <div class="input-group-append">
+        <span class="input-group-text"><i class="fas fa-key"></i></span>
+      </div>
     </div>
 
     <div class="input-group mb-3">
@@ -37,6 +42,11 @@
         <span class="input-group-text">Zip Code</span>
       </div>
       <input type="text" class="form-control" placeholder="enter zip code here"  id="zip" >
+      
+      <div class="input-group-append">
+        <span class="input-group-text"> <i class="fas fa-mail-bulk"></i></span>
+      </div>
+      
     </div>
 
 
@@ -45,6 +55,11 @@
         <span class="input-group-text">City Name</span>
       </div>
       <input type="text" class="form-control" placeholder="enter city name here"  id="city" >
+      <div class="input-group-append">
+        <span class="input-group-text"> <i class="fas fa-map-marked-alt"></i></span>
+      </div>
+     
+
     </div>
 
   
@@ -60,7 +75,7 @@
       </div>
 
 
-    <input type="button" id="get" class="btn  btn-light btn-block" value="Get Data"></input>
+    <input type="button" id="get" class="btn btn-sm btn-light btn-block" value="Get Data"></input>
   </form>
   <hr>
 
@@ -100,13 +115,11 @@
  </div>
 <hr>
   </div>
+
+
 <!-- Open Layer Maps Javascript Code -->  
 <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
 <!-- Customerized Javascript Code -->  
 <script src="app.js" type="text/javascript"></script>
-<!-- JS, Popper.js, and jQuery -->
-<script src="https://code.jquery.com/jquery-4.5.1.slim.min.js" integrity="sha484-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy48MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha484-9/reFTGAW84EW2RDu2S0VKaIzap4H66lZH81PoYlFhbGU+6BZp6G7niu745Sk7lN" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha484-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 </body>
 </html>
