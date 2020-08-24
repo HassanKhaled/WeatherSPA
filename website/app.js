@@ -4,8 +4,6 @@
 */
 
 
-map = new OpenLayers.Map("mapdiv");
-map.addLayer(new OpenLayers.Layer.OSM());
 
 /** @constant
     @type {array}
@@ -21,24 +19,9 @@ const months= ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
 /** @constant
     @type {string}
     @global
-    @description Hold reference to zip base  open weather map api Url.
+    @description Hold reference to open weather map api url.
 */
-const baseZipUrl = 'api.openweathermap.org/data/2.5/weather?zip=';
-
-/** @constant
-    @type {string}
-    @global
-    @description Hold reference to to city base open weather map api Url.
-*/
-const baseCityUrl = 'api.openweathermap.org/data/2.5/weather?q=';
-
-
-/** @constant
-    @type {string}
-    @global
-    @description Hold reference to to lat and log base open weather map api Url.
-*/
-const baseLatLogUrl = 'api.openweathermap.org/data/2.5/weather?';
+const baseApiUrl = 'api.openweathermap.org/data/2.5/weather';
 
 /** @type {object}
     @global
@@ -143,7 +126,6 @@ const temp = select('#temp');
 */
 changeDivInnerHTML = (ele,text)=>{ele.innerHTML=`${text}`;}
 
-
 /**
 * @function  getFlatCountrFlageByCountryCode
 * @description set the image element href to the approiate country href from country api
@@ -156,25 +138,44 @@ getCountryFlageByCountryCodeAndStyle =( imageElement,code,style )=> {
 }
 
 
-intilizeMap = coord => {
-let x =document.getElementById('mapdiv').children.length;
 
-if(true){
+/**
+* @function  drawOpenLayersMapOnPage
+* @description Draw the map from open layer map using coord  
+* @param {object} coord
+*/
+drawOpenLayersMapOnPage = coord =>{
+    map = new OpenLayers.Map("mapdiv");
+    map.addLayer(new OpenLayers.Layer.OSM());
     var lonLat = new OpenLayers.LonLat( coord.lon ,coord.lat)
           .transform(
             new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
             map.getProjectionObject() // to Spherical Mercator Projection
           );
-          
-    var zoom=10;
-
+    var zoom=16;
     var markers = new OpenLayers.Layer.Markers( "Markers" );
     map.addLayer(markers);
-    
     markers.addMarker(new OpenLayers.Marker(lonLat));
-    
     map.setCenter (lonLat, zoom);
 
+}
+
+
+/**
+* @function  intilizeMap
+* @description Removes existing map and redraw it again otherwide draw it 
+* @param {object} coord
+*/
+intilizeMap = coord => {
+
+let x =document.getElementById('mapdiv').children.length;
+
+   if(x===0){
+        drawOpenLayersMapOnPage(coord);
+    }else{
+        let  temp  = document.getElementById('mapdiv');
+        temp.removeChild(temp.children[0]);
+        drawOpenLayersMapOnPage(coord);
     }
 }
 
@@ -205,7 +206,7 @@ getDate = ()=> { return `${currentDate()} ${currentTime()}`}
 * @param {string} zip
 * @returns {string} Complete url to the open weather map api with zip code and api key
 */
-fullZipUrl = zip =>{return`https://${baseZipUrl}${zip},us&appid=${text(apiKey)}&units=metric`;}
+fullZipUrl = zip =>{return`https://${baseApiUrl}?zip=${zip},us&appid=${text(apiKey)}&units=metric`;}
 
 
 /**
@@ -214,7 +215,7 @@ fullZipUrl = zip =>{return`https://${baseZipUrl}${zip},us&appid=${text(apiKey)}&
 * @param {string} zip
 * @returns {string} Complete url to the open weather map api with city name and api key 
 */
-fullCityUrl = city =>{return`https://${baseCityUrl}${city}&appid=${text(apiKey)}&units=metric`;}
+fullCityUrl = city =>{return`https://${baseApiUrl}?q=${city}&appid=${text(apiKey)}&units=metric`;}
 
 /**
 * @function  fullCitypUrl
@@ -222,7 +223,7 @@ fullCityUrl = city =>{return`https://${baseCityUrl}${city}&appid=${text(apiKey)}
 * @param {string} zip
 * @returns {string} Complete url to the open weather map api with city name and api key 
 */
-fullLatLonUrl = (lat, lon) =>{return`https://${baseLatLogUrl}lat=${lat}&lon=${lon}&appid=${text(apiKey)}&units=metric`;}
+fullLatLonUrl = (lat, lon) =>{return`https://${baseApiUrl}?lat=${lat}&lon=${lon}&appid=${text(apiKey)}&units=metric`;}
 
 /**
 * @function  getIconById
@@ -322,14 +323,14 @@ getCurrentDay = () => {
  }
 
 
-  /**
+/**
 * @function  showHiddenContentDivById
 * @description Show hidden div content using id 
 * @param {string}  id of the div to be shown
 */
 showHiddenContentDivById = (id) => {
    select('#'+id).style.display="block";
- }
+}
 
  /**
 * @function  currentTime
@@ -364,23 +365,19 @@ changeInenerHTMLContentById = (content,id) => {
 * @returns {object} Consisted of three value date, temperature and finally feeling of the user
 */
 getWeatherDataFromOpenWeartherApi = async url => {
-
-
+   // showHiddenContentDivById("content");
+    log('cool','success');
     const response = await fetch(url);
     try{
 
-
-    
+       showHiddenContentDivById('content');
        const data = await response.json();
        console.log(data);
-        
-
-    
        getCountryFlageByCountryCodeAndStyle(flag, data.sys.country,'flat');
        
-
        let current = data.main;
        intilizeMap(data.coord);
+
        changeFavIconById(data.weather[0].icon);
        changeDivInnerHTML(temp,current.temp+" &#8451;");
        changeDivInnerHTML(description,data.weather[0].description);
@@ -392,32 +389,25 @@ getWeatherDataFromOpenWeartherApi = async url => {
        changeInenerHTMLContentById(current.pressure,'pre')
        changeInenerHTMLContentById(current.feels_like+" &#8451;",'like')
        changeInenerHTMLContentById(current.temp_min+" &#8451;",'min')
-       changeInenerHTMLContentById(current.temp_max+" &#8451;",'max') */
-
-       
-       
+       changeInenerHTMLContentById(current.temp_max+" &#8451;",'max') 
     }catch(error){
-        alert(error+"from get data from api");
+        alert(error+" from get data from api");
     }
 }
 
-
+/*
 update = () =>{
     let now = new Date();
 
     let time ='';
     let h = now.getHours();
     let m =now.getMinutes();
-    let s =now.getSeconds();
-    
+    let s =now.getSeconds();  
     if(h>=12){
         time="PM";
     }else{
         time="AM";
     }
-
-
-
     document.getElementById('date').innerHTML=checkDigits(h)+' '+checkDigits(m)+' '+checkDigits(s)+' '+time;
 
 }
@@ -430,7 +420,7 @@ checkDigits = (digit)=>{
         return digit;
 }
 
-//setInterval(update, 500);
+setInterval(update, 500);*/
 
 /**
  * End Main Functions
@@ -438,16 +428,27 @@ checkDigits = (digit)=>{
  *
 */
 
-function error() {
+
+
+/**
+* @function  error
+* @description when the geolocation failed     
+* @callback getCurrentPosition
+*/
+ error = () => {
     alert('Unable to retrieve your location');
   }
 
-function success(position) {
+/**
+* @function  success
+* @description when the geolocation success 
+* @param {object} position of the current user 
+* @callback getCurrentPosition
+*/
+success = (position) => {
 latInput.value = position.coords.latitude;
 lonInput.value= position.coords.longitude;
-
  getWeatherDataFromOpenWeartherApi(fullLatLonUrl(text(latInput),text(lonInput)));
-
   }
 
 
@@ -456,21 +457,28 @@ lonInput.value= position.coords.longitude;
  */
 getButton.addEventListener('click',() => {
 
-    showHiddenContentDivById('content');
+   
       let x = document.querySelectorAll('input[type="text"]');
       console.log(x);
         for(i of x){
-                if(i.id==='zip' && i.value!==''&&i.type==='text'){
+                if(i.id==='zip' && i.value!==''){
                     getWeatherDataFromOpenWeartherApi(fullZipUrl(text(zipInput)))
-                }else if(i.id==="city" && i.value!==''&&i.type==='text'){
+                    break;
+                }else if(i.id==="city" && i.value!==''){
                     getWeatherDataFromOpenWeartherApi(fullCityUrl(text(cityInput)))
-                }else if(i.id==="lon" && i.value!==''&&i.type==='text'){  
-                     getWeatherDataFromOpenWeartherApi(fullLatLonUrl(text(latInput),text(lonInput)));        
+                    break;
+                }else if(i.id==="lon" && i.value!==''){  
+                     getWeatherDataFromOpenWeartherApi(fullLatLonUrl(text(latInput),text(lonInput)))
+                     break;       
                 }
         }
-
 })
 
-fillButton.addEventListener('click', ()=>{
- navigator.geolocation.getCurrentPosition(success, error);
+fillButton.addEventListener('click', (e)=>{
+    e.preventDefault();
+    if(apiKey.value!==''){
+    navigator.geolocation.getCurrentPosition(success, error);
+    }else{
+        alert("Make Sure you have your Api key");
+    }
 });
