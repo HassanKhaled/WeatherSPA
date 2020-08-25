@@ -76,6 +76,29 @@ const  description=select("#des");
 const getButton = select('#get');
 
 
+
+/** @constant
+    @type {object}
+    @global
+    @description Hold reference to  button html element.
+*/
+const saveButton = select('#save');
+
+/** @constant
+    @type {object}
+    @global
+    @description Hold reference to  button html element.
+*/
+const retrieveButton = select('#ret');
+
+/** @constant
+    @type {object}
+    @global
+    @description Hold reference to  button html element.
+*/
+const deleteButton = select('#del');
+
+
 /** @constant
     @type {object}
     @global
@@ -460,6 +483,48 @@ checkDigits = (digit)=>{
         return digit;
 }
 
+/**
+* @function  saveDataToLocalStorage
+* @param {object}  data to be stored 
+* @param {string}  key string key to access the data
+* @description Stores data to the local stroage after converting to string.
+*/
+saveDataToLocalStorage = (key,data)=>{
+    if(checkType(data)==='String')
+        localStorage.setItem(key,data);
+    else
+        localStorage.setItem(key,JSON.stringify(data));
+}
+
+
+/**
+* @function  getDataFromLocalStorage
+* @param {string}  key string key to access the data
+* @description retrieve the data from the local storage.
+* @returns  data from the local storage 
+*/
+getDataFromLocalStorage = (key)=>{
+ return JSON.parse(localStorage.getItem(key));
+}
+
+
+/**
+* @function  removeDataFromLocalStorage
+* @param {string}  key string key to access the data
+* @description retrieve the data from the local storage.
+*/
+removeDataFromLocalStorage = (key)=>{ localStorage.removeItem(key);}
+
+
+/**
+* @function  checkType
+* @param {object}  data to be stored 
+* @description check the type of the object.
+* @returns return the type of the object
+*/
+checkType = (data)=>{
+    return typeof data;
+}
 
 /**
  * End Helper Functions
@@ -497,11 +562,7 @@ getWeatherDataFromOpenWeartherApi = async url => {
        changeDivInnerHTML(temp,current.temp+unit);
        changeDivInnerHTML(description,data.weather[0].description);
        changeDivInnerHTML(date,`${getCurrentMonthName()}, ${getCurrentDay()}`);
-       /*
-       setTimeInDivById(time,data.dt)
-       setTimeInDivById(rise,data.sys.sunrise);
-       setTimeInDivById(down,data.sys.sunset);
-       */
+
        changeInenerHTMLContentById(`${data.name},${data.sys.country}`,'loc');
        changeInenerHTMLContentById(data.wind.speed,'wind');
        changeInenerHTMLContentById(data.wind.deg,'dir');
@@ -512,7 +573,6 @@ getWeatherDataFromOpenWeartherApi = async url => {
        
 
        changeInenerHTMLContentById(current.feels_like+unit,'like');
-
        changeInenerHTMLContentById(current.temp_min+unit,'min');
        changeInenerHTMLContentById(current.temp_max+unit,'max');
     }
@@ -591,3 +651,23 @@ fillButton.addEventListener('click', (e)=>{
         alert("Make Sure you have your Api key");
     }
 });
+
+
+saveButton.addEventListener('click' , (e)=>{
+    e.preventDefault();
+    saveDataToLocalStorage('api',apiKey.value);
+
+});
+
+deleteButton.addEventListener('click' , (e)=>{
+    e.preventDefault();
+    apiKey.value='';
+    removeDataFromLocalStorage('api');
+});
+
+retrieveButton.addEventListener('click' , (e)=>{
+    e.preventDefault();
+    apiKey.value= getDataFromLocalStorage('api')
+    
+});
+
