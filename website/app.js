@@ -122,9 +122,16 @@ const cityIdInput = select('#cityId');
 /** @constant
     @type {object}
     @global
-    @description Hold reference to units .
+    @description Hold reference to units.
 */
 const unitSelect = select('#unit');
+
+/** @constant
+    @type {object}
+    @global
+    @description Hold reference to visisablity.
+*/
+const visisablity = select('#vis');
 
 /**
  * End Global Variables
@@ -405,22 +412,23 @@ getWeatherDataFromOpenWeartherApi = async url => {
        let current = data.main;
        intilizeMap(data.coord);
 
-      // changeFavIconById(data.weather[0].icon);
+
        changeDivInnerHTML(temp,current.temp+unit);
        changeDivInnerHTML(description,data.weather[0].description);
        changeDivInnerHTML(date,`${getCurrentMonthName()}, ${getCurrentDay()}`);
        changeInenerHTMLContentById(`${data.name},${data.sys.country}`,'loc');
        changeInenerHTMLContentById(data.wind.speed,'wind');
        changeInenerHTMLContentById(data.wind.deg,'dir');
-       changeInenerHTMLContentById(current.humidity,'hum')
-       changeInenerHTMLContentById(current.pressure,'pre')
-
+       changeInenerHTMLContentById(current.humidity,'hum');
+       changeInenerHTMLContentById(current.pressure,'pre');
+       changeInenerHTMLContentById(data.visibility+" &#13214;",'vis')
+       //alert(data.visibility);
        
 
-       changeInenerHTMLContentById(current.feels_like+unit,'like')
+       changeInenerHTMLContentById(current.feels_like+unit,'like');
 
-       changeInenerHTMLContentById(current.temp_min+unit,'min')
-       changeInenerHTMLContentById(current.temp_max+unit,'max') 
+       changeInenerHTMLContentById(current.temp_min+unit,'min');
+       changeInenerHTMLContentById(current.temp_max+unit,'max');
     }
     }catch(error){
         console.log(error);
@@ -501,7 +509,7 @@ getButton.addEventListener('click',() => {
 
     if(apiKey.value!==''){
       let x = document.querySelectorAll('input[type="text"]');
-      console.log(x);
+   
         for(i of x){
                 if(i.id==='zip' && i.value!==''){
                     getWeatherDataFromOpenWeartherApi(fullZipUrl(text(zipInput)))

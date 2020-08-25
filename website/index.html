@@ -68,24 +68,6 @@
         <span class="input-group-text"> <i class="fas fa-map-marker-alt"></i></span>
       </div>
     </div>
-
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Unit</span>
-      </div>
-     <select class="form-control" id="unit">
-        <option selselected="selected"ected >Select your unit of mesurement</option>
-        <option value='&units=metric' >Metric</option>
-        <option value='&units=imperial' >Imperial</option>
-        <option value='' >Default</option>
-      </select>
-      <div class="input-group-append">
-        <span class="input-group-text"> <span class="material-icons">
-          local_library
-          </span></span>
-      </div>
-    </div>
-
   
       <div class="input-group mb-3">
         <div class="input-group-prepend">
@@ -95,6 +77,22 @@
         <input type="text" class="form-control" placeholder="enter Latitude here"  id="lat">
         <div class="input-group-append">
           <button class="btn btn-light" id="fill" >Fill</button>
+        </div>
+      </div>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Unit</span>
+        </div>
+       <select class="form-control" id="unit">
+          <option value='&units=metric' >Metric</option>
+          <option value='&units=imperial' >Imperial</option>
+          <option value='' >Default</option>
+        </select>
+        <div class="input-group-append">
+          <span class="input-group-text"> <span class="material-icons">
+            local_library
+            </span></span>
         </div>
       </div>
 
@@ -131,8 +129,10 @@
     <div class="col-2">
       <div > <h4><div id = "date"></div></h4></div>
       <hr>
-      <div > <h4><div id = "loc"></div></h4></div>
+      <div> <h4><div id = "loc"></div></h4></div>
       <img id="flag" src="">
+      <hr>
+      <div><h4>  Visibility  <i class="fas fa-eye"></i> <div id = 'vis'></div></h4> </div>
     </div>
     <div class="col-1"></div>
   </div>
