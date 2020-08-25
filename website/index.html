@@ -27,13 +27,11 @@
 <div class="container">
 
   <form>
-
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <span class="input-group-text">Api Key</span>
       </div>
       <input type="text" class="form-control" placeholder="enter api key here"  id="api" >
-    
 
       <div class="input-group-append">
         <button class="btn btn-light btn-block"  id='save'> <i class="fas fa-save"></i></button>
@@ -101,6 +99,7 @@
           <span class="input-group-text">Unit</span>
         </div>
        <select class="form-control" id="unit">
+          <option value='' >Choose Your Prefered Measrment System... </option>
           <option value='&units=metric' >Metric</option>
           <option value='&units=imperial' >Imperial</option>
           <option value='' >Default</option>
@@ -112,6 +111,19 @@
         </div>
       </div>
 
+      
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Language</span>
+        </div>
+       <select class="form-control" id="lang">
+          <option value='' >Choose Your Language... </option>
+          
+        </select>
+        <div class="input-group-append">
+          <span class="input-group-text"> <i class="fas fa-language"></i></span>
+        </div>
+      </div>
 
     <button type="button" id="get" class="btn btn-light btn-block">Get Data  <i class="fas fa-search-location"></i></button>
   </form>
@@ -143,7 +155,7 @@
 
     <div class="col-2">
       <div> <h4><div id = "date"></div></h4></div>
-      <hr>
+   <!---   <hr>
       <div> <h4><div id = "time"></div></h4></div>
       <hr>
       <div> <h4><div id = "rise"></div>  <span class="material-icons">
@@ -152,7 +164,7 @@
       <div> <h4><div id = "down"></div><span class="material-icons">
         arrow_circle_down
         </span></h4></div>
-
+      -->
 
       <div> <h4><div id = "loc"></div>  </h4></div>
       <img id="flag" src="">

@@ -10,12 +10,13 @@ let func = ''
     @global
     @description Hold months' names .
 */
-
 const months= ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ];
 
-let counter = 0;
+const languages = [{value:'&lang=ar',text:'Arabic'},{value:'&lang=de',text:'German'},
+                   {value:'&lang=en',text:'English'},{value:'&lang=fr',text:'French'},
+                   {value:'&lang=it',text:'Italian'}];
 
 /** @constant
     @type {string}
@@ -36,6 +37,13 @@ let coord = '';
     @description Hold reference to my open weather map api key.
 */
 const  apiKey=select("#api");
+
+/** @constant
+    @type {object}
+    @global
+    @description Hold reference to language select element.
+*/
+const  languageSelect=select("#lang");
 
 
 /** @constant
@@ -526,6 +534,27 @@ checkType = (data)=>{
     return typeof data;
 }
 
+
+/**
+* @function  filLanguageSelect
+* @param {object}  data to be stored 
+* @description check the type of the object.
+* @returns return the type of the object
+*/
+filLanguageSelect= (target) =>{
+
+    for(lang of languages){
+        let x = document.createElement('option');
+        x.setAttribute('value',lang.value);
+        x.innerHTML=lang.text;
+        console.log(x);
+        target.appendChild(x);
+    }
+
+}
+  
+filLanguageSelect(languageSelect);
+
 /**
  * End Helper Functions
  * Begin Main Functions
@@ -541,12 +570,12 @@ checkType = (data)=>{
 */
 getWeatherDataFromOpenWeartherApi = async url => {
    
-   
-    const response = await fetch(url+unitSelect.value);
+    let completeUrl = url+unitSelect.value+languageSelect.value;
+    console.log(completeUrl);
+    const response = await fetch(completeUrl);
     try{
     
-       if(func!=='')
-            clearInterval(func);
+      
        const data = await response.json();
         if(data.cod===200){
        showHiddenContentDivById('content');
