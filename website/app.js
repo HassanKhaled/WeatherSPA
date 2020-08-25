@@ -3,7 +3,7 @@
  *
 */
 
-
+let func = ''
 
 /** @constant
     @type {array}
@@ -45,6 +45,20 @@ const  apiKey=select("#api");
 */
 const  flag=select("#flag");
 
+/** @constant
+    @type {object}
+    @global
+    @description Hold refrence to rise element.
+*/
+const  rise=select("#rise");
+
+
+/** @constant
+    @type {object}
+    @global
+    @description Hold refrence to down element.
+*/
+const  down=select("#down");
 
 /** @constant
     @type {object}
@@ -411,15 +425,11 @@ getDegreeUnitFromUnit = ()=>{
 * @param {number}  time number of second from the target location as current date time 
 * @description Update current time from the target location 
 */
-setTimeInDivById = t=>{
+setTimeInDivById = (target,t)=>{
     let x = new Date(t);
     let period = getAmOrPm(x.getHours());
-
-    x.setSeconds(x.getSeconds()+counter);
-    changeDivInnerHTML(time,`${checkDigits(x.getHours())}:${checkDigits(x.getMinutes())}:${checkDigits(x.getSeconds())} ${period}`);
-    setInterval(updateTime,1000,t);
+    changeDivInnerHTML(target,`${checkDigits(x.getHours())}:${checkDigits(x.getMinutes())}:${checkDigits(x.getSeconds())} ${period}`);
 }
-
 
 /**
 * @function  getAmOrPm
@@ -434,22 +444,11 @@ getAmOrPm = (hour) =>{
         return"AM";
 }
 
-/**
-* @function  updateTime
-* @description update current time related to the target location    
-* @callback setTimeInDivById
-*/
-updateTime = (t) => {
-    let x = new Date(t);
-    x.setSeconds(x.getSeconds()+counter);
-    let period = getAmOrPm(x.getHours());
-    counter++;
-    changeDivInnerHTML(time,`${checkDigits(x.getHours())}:${checkDigits(x.getMinutes())}:${checkDigits(x.getSeconds())} ${period}`);
-}
+
 
 
  /**
-* @function  setTimeInDivById
+* @function  checkDigits
 * @param {number}  digit number to add 0 before single digit 
 * @description add zero to start of any single digital number 
 */
@@ -481,7 +480,8 @@ getWeatherDataFromOpenWeartherApi = async url => {
     const response = await fetch(url+unitSelect.value);
     try{
     
-      
+       if(func!=='')
+            clearInterval(func);
        const data = await response.json();
         if(data.cod===200){
        showHiddenContentDivById('content');
@@ -492,14 +492,16 @@ getWeatherDataFromOpenWeartherApi = async url => {
        let current = data.main;
        intilizeMap(data.coord);
 
-        let time = new Date(data.dt);
+      
 
        changeDivInnerHTML(temp,current.temp+unit);
        changeDivInnerHTML(description,data.weather[0].description);
        changeDivInnerHTML(date,`${getCurrentMonthName()}, ${getCurrentDay()}`);
-      setTimeInDivById(data.dt)
-       //changeDivInnerHTML(date,`${checkDigits(time.getHours())}:${checkDigits(time.getMinutes())}:${checkDigits(time.getSeconds())}`);
-
+       /*
+       setTimeInDivById(time,data.dt)
+       setTimeInDivById(rise,data.sys.sunrise);
+       setTimeInDivById(down,data.sys.sunset);
+       */
        changeInenerHTMLContentById(`${data.name},${data.sys.country}`,'loc');
        changeInenerHTMLContentById(data.wind.speed,'wind');
        changeInenerHTMLContentById(data.wind.deg,'dir');

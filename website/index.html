@@ -76,7 +76,7 @@
         <input type="text" class="form-control" placeholder="enter Longitude here"  id="lon" >
         <input type="text" class="form-control" placeholder="enter Latitude here"  id="lat">
         <div class="input-group-append">
-          <button class="btn btn-light" id="fill" >Fill</button>
+          <button class="btn btn-light" id="fill" >Locate  <i class="fas fa-map-pin"></i></i></button>
         </div>
       </div>
 
@@ -97,7 +97,7 @@
       </div>
 
 
-    <input type="button" id="get" class="btn btn-sm btn-light btn-block" value="Get Data"></input>
+    <button type="button" id="get" class="btn  btn-light btn-block">Get Data  <i class="fas fa-search-location"></i></button>
   </form>
   <hr>
 
@@ -115,7 +115,6 @@
       <hr>
     </div>
 
-
     <div class="col-3"><h4>Wind Speed <i class="fas fa-wind"></i><div id="wind"></div></h4>
     <hr>
     <h4> Direction <i class="far fa-compass"></i><div id="dir"></div> </h4>
@@ -131,7 +130,15 @@
       <hr>
       <div> <h4><div id = "time"></div></h4></div>
       <hr>
-      <div> <h4><div id = "loc"></div></h4></div>
+      <div> <h4><div id = "rise"></div>  <span class="material-icons">
+        arrow_circle_up
+        </span></h4></div>
+      <div> <h4><div id = "down"></div><span class="material-icons">
+        arrow_circle_down
+        </span></h4></div>
+
+
+      <div> <h4><div id = "loc"></div>  </h4></div>
       <img id="flag" src="">
       <hr>
       <div><h4>  Visibility  <i class="fas fa-eye"></i> <div id = 'vis'></div></h4> </div>
