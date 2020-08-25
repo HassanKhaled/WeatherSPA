@@ -53,6 +53,14 @@ const  languageSelect=select("#lang");
 */
 const  flag=select("#flag");
 
+
+/** @constant
+    @type {object}
+    @global
+    @description Hold refrence to weather image element.
+*/
+const  weather=select("#weather");
+
 /** @constant
     @type {object}
     @global
@@ -212,7 +220,6 @@ changeDivInnerHTML = (ele,text)=>{ele.innerHTML=`${text}`;}
 getCountryFlageByCountryCodeAndStyle =( imageElement,code,style )=> {
     imageElement.src = `https://www.countryflags.io/${code}/${style}/64.png`;
 }
-
 
 
 /**
@@ -585,7 +592,7 @@ getWeatherDataFromOpenWeartherApi = async url => {
        
        let current = data.main;
        intilizeMap(data.coord);
-
+        weather.src=getIconById(data.weather[0].icon);
       
 
        changeDivInnerHTML(temp,current.temp+unit);
@@ -599,6 +606,7 @@ getWeatherDataFromOpenWeartherApi = async url => {
        changeInenerHTMLContentById(current.pressure,'pre');
        changeInenerHTMLContentById(data.visibility+" &#13214;",'vis')
        
+
        
 
        changeInenerHTMLContentById(current.feels_like+unit,'like');
