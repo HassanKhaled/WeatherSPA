@@ -221,7 +221,7 @@ getDate = ()=> { return `${currentDate()} ${currentTime()}`}
 * @param {string} zip
 * @returns {string} Complete url to the open weather map api with zip code and api key
 */
-fullZipUrl = zip =>{return`${baseApiUrl}?zip=${zip},us&appid=${text(apiKey)}&units=metric`;}
+fullZipUrl = zip =>{return`${baseApiUrl}?zip=${zip},us&appid=${text(apiKey)}`;}
 
 
 /**
@@ -230,7 +230,7 @@ fullZipUrl = zip =>{return`${baseApiUrl}?zip=${zip},us&appid=${text(apiKey)}&uni
 * @param {string} zip
 * @returns {string} Complete url to the open weather map api with city name and api key 
 */
-fullCityUrl = city =>{return`${baseApiUrl}?q=${city}&appid=${text(apiKey)}&units=metric`;}
+fullCityUrl = city =>{return`${baseApiUrl}?q=${city}&appid=${text(apiKey)}`;}
 
 /**
 * @function  fullLatLonUrl
@@ -239,7 +239,7 @@ fullCityUrl = city =>{return`${baseApiUrl}?q=${city}&appid=${text(apiKey)}&units
 * @param {string} lon
 * @returns {string} Complete url to the open weather map api with latitude and longitude 
 */
-fullLatLonUrl = (lat, lon) =>{return`${baseApiUrl}?lat=${lat}&lon=${lon}&appid=${text(apiKey)}&units=metric`;}
+fullLatLonUrl = (lat, lon) =>{return`${baseApiUrl}?lat=${lat}&lon=${lon}&appid=${text(apiKey)}`;}
 
 
 
@@ -249,7 +249,7 @@ fullLatLonUrl = (lat, lon) =>{return`${baseApiUrl}?lat=${lat}&lon=${lon}&appid=$
 * @param {string} id
 * @returns {string} Complete url to the open weather map api with city ip 
 */
-fullCityIdUrl = (id) =>{return`${baseApiUrl}?id=${id}&appid=${text(apiKey)}&units=metric`;}
+fullCityIdUrl = (id) =>{return`${baseApiUrl}?id=${id}&appid=${text(apiKey)}`;}
 
 /**
 * @function  getIconById
@@ -389,14 +389,16 @@ changeInenerHTMLContentById = (content,id) => {
 * @returns {object} Consisted of three value date, temperature and finally feeling of the user
 */
 getWeatherDataFromOpenWeartherApi = async url => {
-   // showHiddenContentDivById("content");
-    log('cool','success');
-    const response = await fetch(url);
+   
+   
+    const response = await fetch(url+unitSelect.value);
     try{
-       
+    
+      
        const data = await response.json();
         if(data.cod===200){
        showHiddenContentDivById('content');
+       let unit = getDegreeUnitFromUnit();
        console.log(data);
        getCountryFlageByCountryCodeAndStyle(flag, data.sys.country,'flat');
        
@@ -404,7 +406,7 @@ getWeatherDataFromOpenWeartherApi = async url => {
        intilizeMap(data.coord);
 
       // changeFavIconById(data.weather[0].icon);
-       changeDivInnerHTML(temp,current.temp+" &#8451;");
+       changeDivInnerHTML(temp,current.temp+unit);
        changeDivInnerHTML(description,data.weather[0].description);
        changeDivInnerHTML(date,`${getCurrentMonthName()}, ${getCurrentDay()}`);
        changeInenerHTMLContentById(`${data.name},${data.sys.country}`,'loc');
@@ -412,13 +414,26 @@ getWeatherDataFromOpenWeartherApi = async url => {
        changeInenerHTMLContentById(data.wind.deg,'dir');
        changeInenerHTMLContentById(current.humidity,'hum')
        changeInenerHTMLContentById(current.pressure,'pre')
-       changeInenerHTMLContentById(current.feels_like+" &#8451;",'like')
-       changeInenerHTMLContentById(current.temp_min+" &#8451;",'min')
-       changeInenerHTMLContentById(current.temp_max+" &#8451;",'max') 
+
+       
+
+       changeInenerHTMLContentById(current.feels_like+unit,'like')
+
+       changeInenerHTMLContentById(current.temp_min+unit,'min')
+       changeInenerHTMLContentById(current.temp_max+unit,'max') 
     }
     }catch(error){
         console.log(error);
         alert(error);
+    }
+}
+
+getDegreeUnitFromUnit = ()=>{
+
+    switch(unitSelect.value){
+        case '&units=metric': return ' &#8451' ;break;
+        case '&units=imperial': return ' &#8457;' ;break;
+        default: return ' &#8490;' ;break;
     }
 }
 

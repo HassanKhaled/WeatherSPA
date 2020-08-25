@@ -4,13 +4,9 @@ body{
     background: #111;
 }
 
-input[type=text] {
-    background-color: #555;
-    color:#eee;
-    border:solid 1px #777;
-}
 
-select {
+.form-control {
+
     background-color: #555;
     color:#eee;
     border:solid 1px #777;
