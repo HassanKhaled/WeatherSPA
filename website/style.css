@@ -9,6 +9,13 @@ input[type=text] {
     color:#eee;
     border:solid 1px #777;
 }
+
+select {
+    background-color: #555;
+    color:#eee;
+    border:solid 1px #777;
+}
+
 h1,
 h2,
 h3,

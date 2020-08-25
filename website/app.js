@@ -21,7 +21,7 @@ const months= ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
     @global
     @description Hold reference to open weather map api url.
 */
-const baseApiUrl = 'api.openweathermap.org/data/2.5/weather';
+const baseApiUrl = 'https://api.openweathermap.org/data/2.5/weather';
 
 /** @type {object}
     @global
@@ -110,6 +110,21 @@ const date = select('#date');
     @description Hold reference to temp div.
 */
 const temp = select('#temp');
+
+
+/** @constant
+    @type {object}
+    @global
+    @description Hold reference to city id text.
+*/
+const cityIdInput = select('#cityId');
+
+/** @constant
+    @type {object}
+    @global
+    @description Hold reference to units .
+*/
+const unitSelect = select('#unit');
 
 /**
  * End Global Variables
@@ -206,24 +221,35 @@ getDate = ()=> { return `${currentDate()} ${currentTime()}`}
 * @param {string} zip
 * @returns {string} Complete url to the open weather map api with zip code and api key
 */
-fullZipUrl = zip =>{return`https://${baseApiUrl}?zip=${zip},us&appid=${text(apiKey)}&units=metric`;}
+fullZipUrl = zip =>{return`${baseApiUrl}?zip=${zip},us&appid=${text(apiKey)}&units=metric`;}
 
 
 /**
-* @function  fullCitypUrl
+* @function  fullCityUrl
 * @description Return a complete url for open weather map api with temp in metric system city search
 * @param {string} zip
 * @returns {string} Complete url to the open weather map api with city name and api key 
 */
-fullCityUrl = city =>{return`https://${baseApiUrl}?q=${city}&appid=${text(apiKey)}&units=metric`;}
+fullCityUrl = city =>{return`${baseApiUrl}?q=${city}&appid=${text(apiKey)}&units=metric`;}
 
 /**
-* @function  fullCitypUrl
+* @function  fullLatLonUrl
 * @description Return a complete url for open weather map api with temp in metric system city search
-* @param {string} zip
-* @returns {string} Complete url to the open weather map api with city name and api key 
+* @param {string} lat
+* @param {string} lon
+* @returns {string} Complete url to the open weather map api with latitude and longitude 
 */
-fullLatLonUrl = (lat, lon) =>{return`https://${baseApiUrl}?lat=${lat}&lon=${lon}&appid=${text(apiKey)}&units=metric`;}
+fullLatLonUrl = (lat, lon) =>{return`${baseApiUrl}?lat=${lat}&lon=${lon}&appid=${text(apiKey)}&units=metric`;}
+
+
+
+/**
+* @function  fullCityIdUrl
+* @description Return a complete url for open weather map api with temp in metric system city search
+* @param {string} id
+* @returns {string} Complete url to the open weather map api with city ip 
+*/
+fullCityIdUrl = (id) =>{return`${baseApiUrl}?id=${id}&appid=${text(apiKey)}&units=metric`;}
 
 /**
 * @function  getIconById
@@ -258,9 +284,7 @@ log = (title,msg) => {console.log(title,msg);}
 * @returns {bool}  Resluts of check true some filed is empty otherwise false
 */
 checkInputFields = () => {
-    if(text(zipInput)===''){
-        return true;
-    }else if(text(cityInput==='')){
+    if(text(zipInput)!==''){
         return true;
     }else{
         false;
@@ -369,16 +393,17 @@ getWeatherDataFromOpenWeartherApi = async url => {
     log('cool','success');
     const response = await fetch(url);
     try{
-
-       showHiddenContentDivById('content');
+       
        const data = await response.json();
+        if(data.cod===200){
+       showHiddenContentDivById('content');
        console.log(data);
        getCountryFlageByCountryCodeAndStyle(flag, data.sys.country,'flat');
        
        let current = data.main;
        intilizeMap(data.coord);
 
-       changeFavIconById(data.weather[0].icon);
+      // changeFavIconById(data.weather[0].icon);
        changeDivInnerHTML(temp,current.temp+" &#8451;");
        changeDivInnerHTML(description,data.weather[0].description);
        changeDivInnerHTML(date,`${getCurrentMonthName()}, ${getCurrentDay()}`);
@@ -390,8 +415,10 @@ getWeatherDataFromOpenWeartherApi = async url => {
        changeInenerHTMLContentById(current.feels_like+" &#8451;",'like')
        changeInenerHTMLContentById(current.temp_min+" &#8451;",'min')
        changeInenerHTMLContentById(current.temp_max+" &#8451;",'max') 
+    }
     }catch(error){
-        alert(error+" from get data from api");
+        console.log(error);
+        alert(error);
     }
 }
 
@@ -428,8 +455,6 @@ setInterval(update, 500);*/
  *
 */
 
-
-
 /**
 * @function  error
 * @description when the geolocation failed     
@@ -438,6 +463,8 @@ setInterval(update, 500);*/
  error = () => {
     alert('Unable to retrieve your location');
   }
+
+
 
 /**
 * @function  success
@@ -457,7 +484,7 @@ lonInput.value= position.coords.longitude;
  */
 getButton.addEventListener('click',() => {
 
-   
+    if(apiKey.value!==''){
       let x = document.querySelectorAll('input[type="text"]');
       console.log(x);
         for(i of x){
@@ -467,11 +494,18 @@ getButton.addEventListener('click',() => {
                 }else if(i.id==="city" && i.value!==''){
                     getWeatherDataFromOpenWeartherApi(fullCityUrl(text(cityInput)))
                     break;
-                }else if(i.id==="lon" && i.value!==''){  
-                     getWeatherDataFromOpenWeartherApi(fullLatLonUrl(text(latInput),text(lonInput)))
+                }else if(i.id==="cityId" && i.value!==''){  
+                     getWeatherDataFromOpenWeartherApi(fullCityIdUrl(text(cityIdInput)))
                      break;       
-                }
+                } if(i.id==="lon" && i.value!==''){  
+                    getWeatherDataFromOpenWeartherApi(fullLatLonUrl(text(latInput),text(lonInput)))
+                    break;       
+               }
         }
+    }else{
+
+        alert('Make Sure the api Key is provided');
+    }
 })
 
 fillButton.addEventListener('click', (e)=>{
