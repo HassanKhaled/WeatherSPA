@@ -41,6 +41,13 @@ input[type=text]:focus {
     color: #fff;
 }
 
+.btn-light{
+
+    background: #eee;
+    border:solid 1px #777;
+
+}
+
 .input-group-text{
     background: #999;
     color:#eee;
