@@ -15,6 +15,7 @@ const months= ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ];
 
+let counter = 0;
 
 /** @constant
     @type {string}
@@ -103,6 +104,14 @@ const latInput =select('#lat');
     @description Hold reference to date div.
 */
 const date = select('#date');
+
+
+/** @constant
+    @type {object}
+    @global
+    @description Hold reference to time div.
+*/
+const time = select('#time');
 
 /** @constant
     @type {object}
@@ -376,11 +385,82 @@ currentTime = () => {const now = new Date();
 * @function  changeInenerHTMLContentById
 * @description Change the innner HTML content of an element 
 * @param {string}  content for changing the current inner contnet of the element
-* @param {string}  id of the element we want to change it's innerHTMl contern
+* @param {string}  id of the element we want to change it's innerHTMl content
 */
 changeInenerHTMLContentById = (content,id) => {
     document.getElementById(id).innerHTML=content;
 }
+
+
+ /**
+* @function  getDegreeUnitFromUnit
+* @description Return the units  part of the url to be added to rest of the Url
+* @returns {string} the selected unit to be presented to the user 
+*/
+getDegreeUnitFromUnit = ()=>{
+    switch(unitSelect.value){
+        case '&units=metric': return ' &#8451' ;break;
+        case '&units=imperial': return ' &#8457;' ;break;
+        default: return ' &#8490;' ;break;
+    }
+}
+
+
+ /**
+* @function  setTimeInDivById
+* @param {number}  time number of second from the target location as current date time 
+* @description Update current time from the target location 
+*/
+setTimeInDivById = t=>{
+    let x = new Date(t);
+    let period = getAmOrPm(x.getHours());
+
+    x.setSeconds(x.getSeconds()+counter);
+    changeDivInnerHTML(time,`${checkDigits(x.getHours())}:${checkDigits(x.getMinutes())}:${checkDigits(x.getSeconds())} ${period}`);
+    setInterval(updateTime,1000,t);
+}
+
+
+/**
+* @function  getAmOrPm
+* @description get time of the day AM or PM
+* @param {number} hour of the day 
+* @returns {string} current time of the day 
+*/
+getAmOrPm = (hour) =>{
+    if(hour>=12)
+        return"PM";
+    else
+        return"AM";
+}
+
+/**
+* @function  updateTime
+* @description update current time related to the target location    
+* @callback setTimeInDivById
+*/
+updateTime = (t) => {
+    let x = new Date(t);
+    x.setSeconds(x.getSeconds()+counter);
+    let period = getAmOrPm(x.getHours());
+    counter++;
+    changeDivInnerHTML(time,`${checkDigits(x.getHours())}:${checkDigits(x.getMinutes())}:${checkDigits(x.getSeconds())} ${period}`);
+}
+
+
+ /**
+* @function  setTimeInDivById
+* @param {number}  digit number to add 0 before single digit 
+* @description add zero to start of any single digital number 
+*/
+checkDigits = (digit)=>{
+
+    if(digit<10)
+        return '0'+digit;
+    else
+        return digit;
+}
+
 
 /**
  * End Helper Functions
@@ -412,17 +492,21 @@ getWeatherDataFromOpenWeartherApi = async url => {
        let current = data.main;
        intilizeMap(data.coord);
 
+        let time = new Date(data.dt);
 
        changeDivInnerHTML(temp,current.temp+unit);
        changeDivInnerHTML(description,data.weather[0].description);
        changeDivInnerHTML(date,`${getCurrentMonthName()}, ${getCurrentDay()}`);
+      setTimeInDivById(data.dt)
+       //changeDivInnerHTML(date,`${checkDigits(time.getHours())}:${checkDigits(time.getMinutes())}:${checkDigits(time.getSeconds())}`);
+
        changeInenerHTMLContentById(`${data.name},${data.sys.country}`,'loc');
        changeInenerHTMLContentById(data.wind.speed,'wind');
        changeInenerHTMLContentById(data.wind.deg,'dir');
        changeInenerHTMLContentById(current.humidity,'hum');
        changeInenerHTMLContentById(current.pressure,'pre');
        changeInenerHTMLContentById(data.visibility+" &#13214;",'vis')
-       //alert(data.visibility);
+       
        
 
        changeInenerHTMLContentById(current.feels_like+unit,'like');
@@ -436,41 +520,7 @@ getWeatherDataFromOpenWeartherApi = async url => {
     }
 }
 
-getDegreeUnitFromUnit = ()=>{
 
-    switch(unitSelect.value){
-        case '&units=metric': return ' &#8451' ;break;
-        case '&units=imperial': return ' &#8457;' ;break;
-        default: return ' &#8490;' ;break;
-    }
-}
-
-/*
-update = () =>{
-    let now = new Date();
-
-    let time ='';
-    let h = now.getHours();
-    let m =now.getMinutes();
-    let s =now.getSeconds();  
-    if(h>=12){
-        time="PM";
-    }else{
-        time="AM";
-    }
-    document.getElementById('date').innerHTML=checkDigits(h)+' '+checkDigits(m)+' '+checkDigits(s)+' '+time;
-
-}
-
-checkDigits = (digit)=>{
-
-    if(digit<10)
-        return '0'+digit;
-    else
-        return digit;
-}
-
-setInterval(update, 500);*/
 
 /**
  * End Main Functions
