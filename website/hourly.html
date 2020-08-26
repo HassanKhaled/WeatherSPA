@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css?family=Oswald:400,600,700|Ranga:400,700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cairo">
 <!-- CSS only -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha484-JcKb8q4iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 <link rel="stylesheet" href="style.css">
@@ -38,8 +37,6 @@
   
     <!-- Navbar links -->
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
-     
-      </ul>
     </div>
 
     <form class="form-inline">
@@ -51,10 +48,10 @@
   </nav> 
 
 
-<div class="container px-2">
+<div class="container">
 
   <form class="py-2">
-    
+
 
     <div class="input-group mb-2">
       <div class="input-group-prepend">
@@ -103,9 +100,7 @@
           <span class="input-group-text">Unit</span>
         </div>
 
-       <select class="form-control custom-select" id="unit"  style="background-color: #555;
-       color:#999;
-       border:solid 1px #777" >
+       <select class="form-control" id="unit">
           <option value='' >Choose Your Prefered Measrment System... </option>
           <option value='&units=metric' >Metric</option>
           <option value='&units=imperial' >Imperial</option>
@@ -124,9 +119,7 @@
         <div class="input-group-prepend">
           <span class="input-group-text">Language</span>
         </div>
-       <select class="form-control custom-select" id="lang" style="background-color: #555;
-       color:#999;
-       border:solid 1px #777" >
+       <select class="form-control" id="lang">
           <option value='' >Choose Your Language... </option>
           
         </select>
@@ -138,7 +131,7 @@
     <button type="button" id="get" class="btn btn-light btn-block ">Get Data  <i class="fas fa-search-location"></i></button>
   </form>
 
- <div id="content"  class="my-2" style="display:none;">
+ <div id="content" style="display:none;">
   <div class="row">
     <div class="col-4"><div id="mapdiv" class="map"></div></div>
     

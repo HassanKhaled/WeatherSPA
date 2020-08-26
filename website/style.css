@@ -1,13 +1,62 @@
+
+.form-control::-webkit-input-placeholder { /* Edge */
+    font-family: Cairo;
+    color: #999;
+  }
+  
+  .form-control:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    font-family: Cairo;
+    color: #999;
+  }
+  
+  .form-control::placeholder {
+    font-family: Cairo;
+    color: #999;
+  }
+
+
 body{
-    
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: Cairo;
     background: #111;
 }
 
-.test{
-background-color: #999;
-color: #eee;
+select{
+    background-color: #555;
+    color:#999;
+    border:solid 1px #777;
+}
 
+option{
+    background-color: #555;
+    color:#999;
+    border:solid 1px #777;
+}
+
+
+/*
+option::-moz-selection{
+
+    background-color: #555;
+    color:#999;
+    border:solid 1px #777;
+ 
+}
+
+option::selection{
+
+    background-color: #555;
+    color:#999;
+    border:solid 1px #777;
+ 
+}*/
+
+.test{
+background-color: #808080;
+color: #eee;
+}
+
+.active{
+    text-shadow: 2px 2px 4px #000000;
 }
 
 .form-control {
@@ -93,4 +142,5 @@ input{
     font-family: 'Oswald', sans-serif;
     border: none;
 }
+
 

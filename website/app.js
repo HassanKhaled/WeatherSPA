@@ -3,7 +3,6 @@
  *
 */
 
-let func = ''
 
 /** @constant
     @type {array}
@@ -17,6 +16,11 @@ const months= ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
 const languages = [{value:'&lang=ar',text:'Arabic'},{value:'&lang=de',text:'German'},
                    {value:'&lang=en',text:'English'},{value:'&lang=fr',text:'French'},
                    {value:'&lang=it',text:'Italian'}];
+
+const links = [{href:"index.html",text:"Current"},{href:"hourly.html",text:"Hourly"},
+               {href:"daily.html",text:"Daily"},{href:"climate.html",text:"Climate"},
+               {href:"5days.html",text:"5 Days"}] 
+
 
 /** @constant
     @type {string}
@@ -32,11 +36,19 @@ const baseApiUrl = 'https://api.openweathermap.org/data/2.5/weather';
 let coord = '';
 
 /** @constant
-    @type {string}
+    @type {object}
     @global
     @description Hold reference to my open weather map api key.
 */
 const  apiKey=select("#api");
+
+/** @constant
+    @type {object}
+    @global
+    @description Hold reference to navigation bar.
+*/
+const  navigation=document.querySelector('#collapsibleNavbar');
+
 
 /** @constant
     @type {object}
@@ -200,6 +212,110 @@ const visisablity = select('#vis');
  * Start Helper Functions
  *
 */
+
+
+
+/**
+* @function  setActiveClassForNavBarFromUrl
+* @description Set active class from the current url.
+*/
+setActiveClassForNavBarFromUrl = ()=> {
+    const link = getlastUrlFromCompleteUrl(window.location.pathname);
+    const items = document.querySelectorAll('.nav-item');
+    for(item of items){
+      
+        if( getlastUrlFromCompleteUrl(item.children[0].href)===link){
+            item.children[0].classList.add('active');
+        }
+    }
+}
+
+/**
+* @function  getlastUrlFromCompleteUrl
+* @description Trim the last part of the url .
+* @param {string}  url to be trimmed at the end.
+* @returns Return last part of the url 
+*/
+getlastUrlFromCompleteUrl = (url)=>{
+    return  url.split('/')[url.split('/').length-1]
+}
+
+/**
+* @function  generateDynamicNavbar
+* @description Generate dynamic navbar from json list of objects .
+*/
+generateDynamicNavbar = ()=> {
+    const unorderedList = document.createElement('ul');
+        unorderedList.classList.add('navbar-nav');
+
+    if(navigation.children.length===0){
+       
+
+        for(link of links){
+            const listItem = document.createElement('li');
+            listItem.classList.add('nav-item');
+            const anchor = document.createElement('a');
+            anchor.href=link.href;
+            anchor.text=link.text;
+            anchor.classList.add('nav-link');
+            listItem.appendChild(anchor);
+            unorderedList.appendChild(listItem);
+        }
+
+    navigation.appendChild(unorderedList);
+    }else{
+        navigation.removeChild(navigation.children[0]);
+
+        for(link of links){
+            const listItem = document.createElement('li');
+            listItem.classList.add('nav-item');
+            const anchor = document.createElement('a');
+            anchor.href=link.href;
+            anchor.text=link.text;
+            anchor.classList.add('nav-link');
+            listItem.appendChild(anchor);
+            unorderedList.appendChild(listItem);
+        }
+
+        navigation.appendChild(unorderedList);
+
+    }
+}
+
+
+/**
+* @function  filLanguageSelect
+* @param {object}  data to be stored 
+* @description check the type of the object.
+* @returns return the type of the object
+*/
+filLanguageSelect= (target) =>{
+
+    for(lang of languages){
+        let x = document.createElement('option');
+        x.setAttribute('value',lang.value);
+        x.innerHTML=lang.text;
+        target.appendChild(x);
+    }
+
+}
+
+
+/**
+* @function  start
+* @description call methods  .
+*/
+start = () =>{
+
+    generateDynamicNavbar();
+    setActiveClassForNavBarFromUrl();
+    filLanguageSelect(languageSelect);
+
+}
+
+
+start();
+
 
 /**
 * @function  changeDivInnerHTML
@@ -483,8 +599,6 @@ getAmOrPm = (hour) =>{
 }
 
 
-
-
  /**
 * @function  checkDigits
 * @param {number}  digit number to add 0 before single digit 
@@ -542,25 +656,9 @@ checkType = (data)=>{
 }
 
 
-/**
-* @function  filLanguageSelect
-* @param {object}  data to be stored 
-* @description check the type of the object.
-* @returns return the type of the object
-*/
-filLanguageSelect= (target) =>{
 
-    for(lang of languages){
-        let x = document.createElement('option');
-        x.setAttribute('value',lang.value);
-        x.innerHTML=lang.text;
-        console.log(x);
-        target.appendChild(x);
-    }
-
-}
   
-filLanguageSelect(languageSelect);
+
 
 /**
  * End Helper Functions
@@ -578,12 +676,12 @@ filLanguageSelect(languageSelect);
 getWeatherDataFromOpenWeartherApi = async url => {
    
     let completeUrl = url+unitSelect.value+languageSelect.value;
-    console.log(completeUrl);
     const response = await fetch(completeUrl);
     try{
     
       
        const data = await response.json();
+       
         if(data.cod===200){
        showHiddenContentDivById('content');
        let unit = getDegreeUnitFromUnit();
@@ -605,9 +703,7 @@ getWeatherDataFromOpenWeartherApi = async url => {
        changeInenerHTMLContentById(current.humidity,'hum');
        changeInenerHTMLContentById(current.pressure,'pre');
        changeInenerHTMLContentById(data.visibility+" &#13214;",'vis')
-       
-
-       
+    
 
        changeInenerHTMLContentById(current.feels_like+unit,'like');
        changeInenerHTMLContentById(current.temp_min+unit,'min');

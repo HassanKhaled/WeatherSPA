@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css?family=Oswald:400,600,700|Ranga:400,700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cairo">
 <!-- CSS only -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha484-JcKb8q4iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 <link rel="stylesheet" href="style.css">
@@ -38,9 +37,57 @@
   
     <!-- Navbar links -->
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
-     
-      </ul>
+      <!--
+      <ul class="navbar-nav">
+
+        <li class="nav-item active">
+          <a class="nav-link" href="index.html">Current</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="hourly.html">Hourly</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="daily.html">Daily</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="climate.html">Climate</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="5days.html">5 Days</a>
+        </li>
+
+      </ul>-->
     </div>
+
+    <!--
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Api Key</span>
+      </div>
+      <input type="text" class="form-control" placeholder="enter api key here"  id="api" >
+
+      <div class="input-group-append">
+        <button class="btn btn-light btn-block"  title="save api key to local storage" id='save'> <i class="fas fa-save"></i></button>
+      </div>
+      <div class="input-group-append">
+        <button class="btn btn-light btn-block" title="retrieve api key from local storage" id='ret'> <i class="fas fa-exchange-alt"></i></button>
+      </div>
+
+      <div class="input-group-append">
+        <button class="btn btn-light btn-block"  title="delete api key from local storage"  id='del'> <i class="fas fa-trash-alt"></i></button>
+      </div>
+
+      <div class="input-group-append">
+        <span class="input-group-text"><i class="fas fa-key"></i></span>
+      </div>
+
+    </div>
+    -->
+
 
     <form class="form-inline">
       <input type="text" class="form-control" placeholder="enter api key here"  id="api" >
@@ -48,10 +95,11 @@
       <button class="btn btn-light " title="retrieve api key from local storage" id='ret'> <i class="fas fa-exchange-alt"></i></button>
       <button class="btn btn-light "  title="save api key to local storage" id='save'> <i class="fas fa-save"></i></button>
     </form>
+
   </nav> 
 
 
-<div class="container px-2">
+<div class="container">
 
   <form class="py-2">
     
@@ -103,9 +151,7 @@
           <span class="input-group-text">Unit</span>
         </div>
 
-       <select class="form-control custom-select" id="unit"  style="background-color: #555;
-       color:#999;
-       border:solid 1px #777" >
+       <select class="form-control" id="unit">
           <option value='' >Choose Your Prefered Measrment System... </option>
           <option value='&units=metric' >Metric</option>
           <option value='&units=imperial' >Imperial</option>
@@ -124,9 +170,7 @@
         <div class="input-group-prepend">
           <span class="input-group-text">Language</span>
         </div>
-       <select class="form-control custom-select" id="lang" style="background-color: #555;
-       color:#999;
-       border:solid 1px #777" >
+       <select class="form-control" id="lang">
           <option value='' >Choose Your Language... </option>
           
         </select>
