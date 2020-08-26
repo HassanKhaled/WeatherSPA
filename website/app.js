@@ -213,6 +213,110 @@ const visisablity = select('#vis');
  *
 */
 
+
+
+/**
+* @function  setActiveClassForNavBarFromUrl
+* @description Set active class from the current url.
+*/
+setActiveClassForNavBarFromUrl = ()=> {
+    const link = getlastUrlFromCompleteUrl(window.location.pathname);
+    const items = document.querySelectorAll('.nav-item');
+    for(item of items){
+      
+        if( getlastUrlFromCompleteUrl(item.children[0].href)===link){
+            item.children[0].classList.add('active');
+        }
+    }
+}
+
+/**
+* @function  getlastUrlFromCompleteUrl
+* @description Trim the last part of the url .
+* @param {string}  url to be trimmed at the end.
+* @returns Return last part of the url 
+*/
+getlastUrlFromCompleteUrl = (url)=>{
+    return  url.split('/')[url.split('/').length-1]
+}
+
+/**
+* @function  generateDynamicNavbar
+* @description Generate dynamic navbar from json list of objects .
+*/
+generateDynamicNavbar = ()=> {
+    const unorderedList = document.createElement('ul');
+        unorderedList.classList.add('navbar-nav');
+
+    if(navigation.children.length===0){
+       
+
+        for(link of links){
+            const listItem = document.createElement('li');
+            listItem.classList.add('nav-item');
+            const anchor = document.createElement('a');
+            anchor.href=link.href;
+            anchor.text=link.text;
+            anchor.classList.add('nav-link');
+            listItem.appendChild(anchor);
+            unorderedList.appendChild(listItem);
+        }
+
+    navigation.appendChild(unorderedList);
+    }else{
+        navigation.removeChild(navigation.children[0]);
+
+        for(link of links){
+            const listItem = document.createElement('li');
+            listItem.classList.add('nav-item');
+            const anchor = document.createElement('a');
+            anchor.href=link.href;
+            anchor.text=link.text;
+            anchor.classList.add('nav-link');
+            listItem.appendChild(anchor);
+            unorderedList.appendChild(listItem);
+        }
+
+        navigation.appendChild(unorderedList);
+
+    }
+}
+
+
+/**
+* @function  filLanguageSelect
+* @param {object}  data to be stored 
+* @description check the type of the object.
+* @returns return the type of the object
+*/
+filLanguageSelect= (target) =>{
+
+    for(lang of languages){
+        let x = document.createElement('option');
+        x.setAttribute('value',lang.value);
+        x.innerHTML=lang.text;
+        target.appendChild(x);
+    }
+
+}
+
+
+/**
+* @function  start
+* @description call methods  .
+*/
+start = () =>{
+
+    generateDynamicNavbar();
+    setActiveClassForNavBarFromUrl();
+    filLanguageSelect(languageSelect);
+
+}
+
+
+start();
+
+
 /**
 * @function  changeDivInnerHTML
 * @description Change innnerHTML of a specific div, adds prefix at the start  of text 
@@ -552,109 +656,9 @@ checkType = (data)=>{
 }
 
 
-/**
-* @function  filLanguageSelect
-* @param {object}  data to be stored 
-* @description check the type of the object.
-* @returns return the type of the object
-*/
-filLanguageSelect= (target) =>{
 
-    for(lang of languages){
-        let x = document.createElement('option');
-        x.setAttribute('value',lang.value);
-        x.innerHTML=lang.text;
-        target.appendChild(x);
-    }
-
-}
   
 
-
-/**
-* @function  setActiveClassForNavBarFromUrl
-* @description Set active class from the current url.
-*/
-setActiveClassForNavBarFromUrl = ()=> {
-    const link = getlastUrlFromCompleteUrl(window.location.pathname);
-    const items = document.querySelectorAll('.nav-item');
-    for(item of items){
-      
-        if( getlastUrlFromCompleteUrl(item.children[0].href)===link){
-            item.children[0].classList.add('active');
-        }
-    }
-}
-
-
-/**
-* @function  getlastUrlFromCompleteUrl
-* @description Trim the last part of the url .
-* @param {string}  url to be trimmed at the end.
-* @returns Return last part of the url 
-*/
-getlastUrlFromCompleteUrl = (url)=>{
-    return  url.split('/')[url.split('/').length-1]
-}
-
-
-/**
-* @function  generateDynamicNavbar
-* @description Generate dynamic navbar from json list of objects .
-*/
-generateDynamicNavbar = ()=> {
-    const unorderedList = document.createElement('ul');
-        unorderedList.classList.add('navbar-nav');
-
-    if(navigation.children.length===0){
-       
-
-        for(link of links){
-            const listItem = document.createElement('li');
-            listItem.classList.add('nav-item');
-            const anchor = document.createElement('a');
-            anchor.href=link.href;
-            anchor.text=link.text;
-            anchor.classList.add('nav-link');
-            listItem.appendChild(anchor);
-            unorderedList.appendChild(listItem);
-        }
-
-    navigation.appendChild(unorderedList);
-    }else{
-        navigation.removeChild(navigation.children[0]);
-
-        for(link of links){
-            const listItem = document.createElement('li');
-            listItem.classList.add('nav-item');
-            const anchor = document.createElement('a');
-            anchor.href=link.href;
-            anchor.text=link.text;
-            anchor.classList.add('nav-link');
-            listItem.appendChild(anchor);
-            unorderedList.appendChild(listItem);
-        }
-
-        navigation.appendChild(unorderedList);
-
-    }
-}
-
-
-/**
-* @function  start
-* @description call methods  .
-*/
-start = () =>{
-
-    generateDynamicNavbar();
-    setActiveClassForNavBarFromUrl();
-    filLanguageSelect(languageSelect);
-
-}
-
-
-start();
 
 /**
  * End Helper Functions
