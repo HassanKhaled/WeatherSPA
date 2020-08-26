@@ -3,20 +3,30 @@
  *
 */
 
-
 /** @constant
     @type {array}
     @global
-    @description Hold months' names .
+    @description Hold months' names.
 */
 const months= ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ];
 
+
+/** @constant
+    @type {array}
+    @global
+    @description Hold languages' names.
+*/
 const languages = [{value:'&lang=ar',text:'Arabic'},{value:'&lang=de',text:'German'},
                    {value:'&lang=en',text:'English'},{value:'&lang=fr',text:'French'},
                    {value:'&lang=it',text:'Italian'}];
 
+/** @constant
+    @type {array}
+    @global
+    @description Hold links' names.
+*/
 const links = [{href:"index.html",text:"Current"},{href:"hourly.html",text:"Hourly"},
                {href:"daily.html",text:"Daily"},{href:"climate.html",text:"Climate"},
                {href:"5days.html",text:"5 Days"}] 
@@ -38,9 +48,16 @@ let coord = '';
 /** @constant
     @type {object}
     @global
-    @description Hold reference to my open weather map api key.
+    @description Hold reference input whose content is apis open weather map api key.
 */
 const  apiKey=select("#api");
+
+/** @constant
+    @type {string}
+    @global
+    @description Hold reference to user open weather map api key.
+*/
+const  apiKeyString='';
 
 /** @constant
     @type {object}
@@ -57,14 +74,12 @@ const  navigation=document.querySelector('#collapsibleNavbar');
 */
 const  languageSelect=select("#lang");
 
-
 /** @constant
     @type {object}
     @global
     @description Hold refrence to flag image element.
 */
 const  flag=select("#flag");
-
 
 /** @constant
     @type {object}
@@ -80,7 +95,6 @@ const  weather=select("#weather");
 */
 const  rise=select("#rise");
 
-
 /** @constant
     @type {object}
     @global
@@ -95,14 +109,12 @@ const  down=select("#down");
 */
 const  description=select("#des");
 
-
 /** @constant
     @type {object}
     @global
     @description Hold reference to get button html element.
 */
 const getButton = select('#get');
-
 
 
 /** @constant
@@ -215,6 +227,18 @@ const visisablity = select('#vis');
 
 
 
+checkApiKeyIsSuppliedInCode = ()=>{
+
+    if(apiKeyString===''){
+        const x =document.querySelector('.form-inline');
+        x.style.display='block';
+    }else{
+        apiKey.value=apiKeyString;
+    }
+}
+
+
+
 /**
 * @function  setActiveClassForNavBarFromUrl
 * @description Set active class from the current url.
@@ -241,44 +265,40 @@ getlastUrlFromCompleteUrl = (url)=>{
 }
 
 /**
+* @function  createNavBar
+* @description Create nav bar dynmically .
+*/
+createNavBar = () =>{
+    
+    const unorderedList = document.createElement('ul');
+    unorderedList.classList.add('navbar-nav');
+    for(link of links){
+        const listItem = document.createElement('li');
+        listItem.classList.add('nav-item');
+        const anchor = document.createElement('a');
+        anchor.href=link.href;
+        anchor.text=link.text;
+        anchor.classList.add('nav-link');
+        listItem.appendChild(anchor);
+        unorderedList.appendChild(listItem);
+    }
+    navigation.appendChild(unorderedList);
+
+}
+
+
+/**
 * @function  generateDynamicNavbar
 * @description Generate dynamic navbar from json list of objects .
 */
 generateDynamicNavbar = ()=> {
-    const unorderedList = document.createElement('ul');
-        unorderedList.classList.add('navbar-nav');
+  
 
     if(navigation.children.length===0){
-       
-
-        for(link of links){
-            const listItem = document.createElement('li');
-            listItem.classList.add('nav-item');
-            const anchor = document.createElement('a');
-            anchor.href=link.href;
-            anchor.text=link.text;
-            anchor.classList.add('nav-link');
-            listItem.appendChild(anchor);
-            unorderedList.appendChild(listItem);
-        }
-
-    navigation.appendChild(unorderedList);
+        createNavBar();
     }else{
         navigation.removeChild(navigation.children[0]);
-
-        for(link of links){
-            const listItem = document.createElement('li');
-            listItem.classList.add('nav-item');
-            const anchor = document.createElement('a');
-            anchor.href=link.href;
-            anchor.text=link.text;
-            anchor.classList.add('nav-link');
-            listItem.appendChild(anchor);
-            unorderedList.appendChild(listItem);
-        }
-
-        navigation.appendChild(unorderedList);
-
+        createNavBar();
     }
 }
 
@@ -310,6 +330,7 @@ start = () =>{
     generateDynamicNavbar();
     setActiveClassForNavBarFromUrl();
     filLanguageSelect(languageSelect);
+    checkApiKeyIsSuppliedInCode();
 
 }
 

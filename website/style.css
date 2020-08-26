@@ -33,23 +33,6 @@ option{
 }
 
 
-/*
-option::-moz-selection{
-
-    background-color: #555;
-    color:#999;
-    border:solid 1px #777;
- 
-}
-
-option::selection{
-
-    background-color: #555;
-    color:#999;
-    border:solid 1px #777;
- 
-}*/
-
 .test{
 background-color: #808080;
 color: #eee;
@@ -91,7 +74,8 @@ input[type=text]:focus {
 }
 
 .container{
-
+    border-left-style: solid 1px #777; 
+    border-right-style: solid 1px #777;
     background:#333; 
     color: #fff;
 }
