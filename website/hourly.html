@@ -37,57 +37,7 @@
   
     <!-- Navbar links -->
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
-      <!--
-      <ul class="navbar-nav">
-
-        <li class="nav-item active">
-          <a class="nav-link" href="index.html">Current</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="hourly.html">Hourly</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="daily.html">Daily</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="climate.html">Climate</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="5days.html">5 Days</a>
-        </li>
-
-      </ul>-->
     </div>
-
-    <!--
-    <div class="input-group mb-2">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Api Key</span>
-      </div>
-      <input type="text" class="form-control" placeholder="enter api key here"  id="api" >
-
-      <div class="input-group-append">
-        <button class="btn btn-light btn-block"  title="save api key to local storage" id='save'> <i class="fas fa-save"></i></button>
-      </div>
-      <div class="input-group-append">
-        <button class="btn btn-light btn-block" title="retrieve api key from local storage" id='ret'> <i class="fas fa-exchange-alt"></i></button>
-      </div>
-
-      <div class="input-group-append">
-        <button class="btn btn-light btn-block"  title="delete api key from local storage"  id='del'> <i class="fas fa-trash-alt"></i></button>
-      </div>
-
-      <div class="input-group-append">
-        <span class="input-group-text"><i class="fas fa-key"></i></span>
-      </div>
-
-    </div>
-    -->
-
 
     <form class="form-inline">
       <input type="text" class="form-control" placeholder="enter api key here"  id="api" >
@@ -95,14 +45,13 @@
       <button class="btn btn-light " title="retrieve api key from local storage" id='ret'> <i class="fas fa-exchange-alt"></i></button>
       <button class="btn btn-light "  title="save api key to local storage" id='save'> <i class="fas fa-save"></i></button>
     </form>
-
   </nav> 
 
 
 <div class="container">
 
   <form class="py-2">
-    
+
 
     <div class="input-group mb-2">
       <div class="input-group-prepend">
@@ -182,7 +131,7 @@
     <button type="button" id="get" class="btn btn-light btn-block ">Get Data  <i class="fas fa-search-location"></i></button>
   </form>
 
- <div id="content"  class="my-2" style="display:none;">
+ <div id="content" style="display:none;">
   <div class="row">
     <div class="col-4"><div id="mapdiv" class="map"></div></div>
     
