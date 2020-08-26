@@ -4,6 +4,11 @@ body{
     background: #111;
 }
 
+.test{
+background-color: #999;
+color: #eee;
+
+}
 
 .form-control {
 
@@ -29,10 +34,11 @@ input[type=text]:focus {
 }
 
 #content{
-    background-color: #888;
-    border-radius: 2px;
+    
+    border-radius: 5px;
+    background-color: #555;
     color: #eee;
-
+    border:solid 1px #777;
 }
 
 .container{
@@ -70,10 +76,6 @@ margin: auto;
 margin: auto;
 }
 
-#content{
-margin: auto;
-
-}
 
 /*  Basic Styling To Override Default For Basic HTML Elements */
 label{
@@ -92,34 +94,3 @@ input{
     border: none;
 }
 
-h1{
-    font-size: 36px;
-}
-
-textarea{
-    background:#22b2da;
-    color: #f0d43a;
-    font-size: 20px;
-    font-family: 'Oswald', sans-serif;
-}
-/* Reset style for HTML element on active to have no border*/
-input:focus,
-select:focus,
-textarea:focus,
-button:focus {
-    outline: none;
-}
-
-/* Style for Placeholder Text*/
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: red;
-    opacity: 1; /* Firefox */
-  }
-  
-  :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: red;
-  }
-  
-  ::-ms-input-placeholder { /* Microsoft Edge */
-    color: red;
-  }
