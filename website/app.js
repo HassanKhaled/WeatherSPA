@@ -233,6 +233,7 @@ checkApiKeyIsSuppliedInCode = ()=>{
         const x =document.querySelector('.form-inline');
         x.style.display='block';
     }else{
+        showToastWithTitleAndMessageWithDelay('Success','Api Key have been sucessfully')
         apiKey.value=apiKeyString;
     }
 }
@@ -703,7 +704,6 @@ checkType = (data)=>{
 * @param {string}  message to be shown  
 * @param {string}  delay to be after tha the message will removed 
 * @description shows the toast with set of paramters.
-
 */
 showToastWithTitleAndMessageWithDelay = (title, message, delay)=>{
 
