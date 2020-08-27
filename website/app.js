@@ -359,24 +359,39 @@ getCountryFlageByCountryCodeAndStyle =( imageElement,code,style )=> {
 }
 
 
+
 /**
 * @function  drawOpenLayersMapOnPage
 * @description Draw the map from open layer map using coord  
 * @param {object} coord
 */
 drawOpenLayersMapOnPage = coord =>{
+    try{
+    console.log('1');
     map = new OpenLayers.Map("mapdiv");
+    console.log('2');
     map.addLayer(new OpenLayers.Layer.OSM());
+    console.log('3');
     var lonLat = new OpenLayers.LonLat( coord.lon ,coord.lat)
           .transform(
             new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
             map.getProjectionObject() // to Spherical Mercator Projection
           );
+          console.log('4');
     var zoom=16;
+    console.log('5');
     var markers = new OpenLayers.Layer.Markers( "Markers" );
+    console.log('6');
     map.addLayer(markers);
+    console.log('7');
     markers.addMarker(new OpenLayers.Marker(lonLat));
-    map.setCenter (lonLat, zoom);
+    console.log('8');
+    map.setCenter (lonLat, zoom);}
+    catch(error){
+        console.log('catch');
+        showToastWithTitleAndMessageWithDelay("Error",error,3000);
+    }
+    console.log('9');
 
 }
 
@@ -388,13 +403,18 @@ drawOpenLayersMapOnPage = coord =>{
 */
 intilizeMap = coord => {
 
+
 let x =document.getElementById('mapdiv').children.length;
 
    if(x===0){
         drawOpenLayersMapOnPage(coord);
-    }else{
+        console.log('finished',x);
+    }else if(x===1){
+        console.log('not');
         let  temp  = document.getElementById('mapdiv');
+        console.log('not 1');
         temp.removeChild(temp.children[0]);
+        console.log('not 2');
         drawOpenLayersMapOnPage(coord);
     }
 }
@@ -728,7 +748,9 @@ getWeatherDataFromOpenWeartherApi = async url => {
        getCountryFlageByCountryCodeAndStyle(flag, data.sys.country,'flat');
        
        let current = data.main;
-       intilizeMap(data.coord);
+       coord=data.coord;
+      
+      // intilizeMap(data.coord);
         weather.src=getIconById(data.weather[0].icon);
       
 
@@ -750,8 +772,6 @@ getWeatherDataFromOpenWeartherApi = async url => {
     }
     }catch(error){
         showToastWithTitleAndMessageWithDelay('Error',error,3000);
-        console.log(error);
-        alert(error);
     }
 }
 
@@ -769,7 +789,7 @@ getWeatherDataFromOpenWeartherApi = async url => {
 * @callback getCurrentPosition
 */
  error = () => {
-    alert('Unable to retrieve your location');
+     showToastWithTitleAndMessageWithDelay('Error','Unable to retrieve your location',3000);
   }
 
 
@@ -819,7 +839,7 @@ fillButton.addEventListener('click', (e)=>{
     if(apiKey.value!==''){
     navigator.geolocation.getCurrentPosition(success, error);
     }else{
-        alert("Make Sure you have your Api key");
+        showToastWithTitleAndMessageWithDelay('Error',"Make Sure you have your Api key",3000);
     }
 });
 
@@ -841,4 +861,10 @@ retrieveButton.addEventListener('click' , (e)=>{
     apiKey.value= getDataFromLocalStorage('api')
     
 });
+
+select('#showModal').addEventListener('click', (e)=>{
+    e.preventDefault();
+    setTimeout(intilizeMap,1,coord);
+   
+})
 
