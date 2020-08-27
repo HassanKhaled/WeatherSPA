@@ -677,7 +677,25 @@ checkType = (data)=>{
 }
 
 
+/**
+* @function  showToastWithTitleAndMessageWithDelay
+* @param {string}  title  to be shown  
+* @param {string}  message to be shown  
+* @param {string}  delay to be after tha the message will removed 
+* @description shows the toast with set of paramters.
 
+*/
+showToastWithTitleAndMessageWithDelay = (title, message, delay)=>{
+
+    document.getElementsByTagName('strong')[0].textContent = title;
+    document.getElementsByClassName('toast-body')[0].textContent =message;
+    document.getElementsByClassName('toast')[0].setAttribute('data-delay',delay);
+    $(document).ready(function(){
+        $('.toast').toast({animation: true});
+        $('.toast').toast('show');
+      });
+
+}
   
 
 
@@ -731,6 +749,7 @@ getWeatherDataFromOpenWeartherApi = async url => {
        changeInenerHTMLContentById(current.temp_max+unit,'max');
     }
     }catch(error){
+        showToastWithTitleAndMessageWithDelay('Error',error,3000);
         console.log(error);
         alert(error);
     }
@@ -752,7 +771,6 @@ getWeatherDataFromOpenWeartherApi = async url => {
  error = () => {
     alert('Unable to retrieve your location');
   }
-
 
 
 /**
@@ -792,8 +810,7 @@ getButton.addEventListener('click',() => {
                }
         }
     }else{
-
-        alert('Make Sure the api Key is provided');
+        showToastWithTitleAndMessageWithDelay('Error','Make Sure the api Key is provided',3000);
     }
 })
 

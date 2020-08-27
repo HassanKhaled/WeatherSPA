@@ -26,7 +26,6 @@
  <body>
 
 
-
   <nav class="navbar navbar-expand-md  navbar-dark test">
     <!-- Brand -->
     <img src="favicon.ico" alt="Logo" style="width:40px;">
@@ -41,7 +40,7 @@
      
       </ul>
     </div>
-
+   
     <form class="form-inline" style='display:none'>
       <input type="text" class="form-control" placeholder="enter api key here"  id="api" >
       <button class="btn btn-light "  title="delete api key from local storage"  id='del'> <i class="fas fa-trash-alt"></i></button>
@@ -53,6 +52,18 @@
 
 <div class="container py-2">
 
+  <div class="toast" data-autohide="true" style="position: absolute; top:1%; right: 0;z-index: 1000;" data-delay="10000" >  
+    <div class="toast-header">
+      <strong class="mr-auto">Toast Header</strong>
+      
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+    </div>
+    <div class="toast-body">
+      Some text inside the toast body
+    </div>
+  </div>
+
+ 
   <form >
     <div class="input-group mb-2">
       <div class="input-group-prepend">
@@ -115,8 +126,7 @@
             </span></span>
         </div>
       </div>
-
-      
+ 
       <div class="input-group mb-2 mt-2">
         <div class="input-group-prepend">
           <span class="input-group-text">Language</span>
@@ -177,6 +187,7 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
 <!-- Open Layer Maps Javascript Code -->  
 <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
 <!-- Customerized Javascript Code -->  
