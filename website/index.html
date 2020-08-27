@@ -150,59 +150,168 @@
         </div>
       </div>
 
-    <button type="button" id="get" class="btn btn-light btn-block mb-2">Get Data  <i class="fas fa-search-location"></i></button>
+    <button type="button" id="get" data-toggle="modal" data-target="#myModal" class="btn btn-light btn-block mb-2">Get Data  <i class="fas fa-search-location"></i></button>
   </form>
 
 <!-- The Modal -->
-<div class="modal" id="myModal">
-  <div class="modal-dialog">
+<div class="modal fade " id="myModal">
+  <div class="modal-dialog modal-lg  px-2 py-2">
     <div class="modal-content">    
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Location On Map</h4>
+        <h4 class="modal-title">Weather State</h4>
         <button type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
       </div>
       <!-- Modal body -->
       <div class="modal-body">
-        <div id="mapdiv" class="map"></div>
+
+        <div class="input-group mb-3">
+
+          <div class="input-group-prepend">
+            <span class="input-group-text">Temperature</span>
+          </div>
+          
+          <div class="input-group-prepend">
+            <span class="input-group-text"><div id='temp'></div></span>
+          </div>
+
+          <div class="input-group-prepend">
+            <span class="input-group-text">Like</span>
+          </div>
+
+          <div class="input-group-append">
+            <span class="input-group-text"><div id='like'></div></span>
+          </div>
+
+
+          <div class="input-group-prepend">
+            <span class="input-group-text">Min</span>
+          </div>
+          
+          <div class="input-group-append">
+            <span class="input-group-text"><div id='min'></div></span>
+          </div>
+
+          <div class="input-group-append">
+            <span class="input-group-text">
+              Max
+            </span>
+          </div>
+          
+          <div class="input-group-append">
+            <span class="input-group-text"><div id='max'></div></span>
+          </div>
+        </div>
+
+        
+        
+        <div class="input-group mb-3">
+
+          <div class="input-group-prepend">
+            <span class="input-group-text">Wind Speed </span>
+          </div>
+
+          <div class="input-group-prepend">
+            <span class="input-group-text"><div id="wind"></div></span>
+          </div>
+
+          <div class="input-group-append">
+            <span class="input-group-text">
+              <i class="fas fa-wind"></i>
+            </span>
+          </div>
+
+
+
+          <div class="input-group-append">
+            <span class="input-group-text">
+              Direction
+            </span>
+          </div>
+
+          <div class="input-group-append">
+            <span class="input-group-text">
+              <div id="dir"></div>
+            </span>
+          </div>
+
+          <div class="input-group-append">
+            <span class="input-group-text">
+              <i class="far fa-compass"></i>
+            </span>
+          </div>
+
+
+          <div class="input-group-append">
+            <span class="input-group-text">
+              Humadity
+            </span>
+            <span class="input-group-text">
+              <div id="hum"></div>
+            </span>
+          </div>
+          
+          <div class="input-group-append">
+            <span class="input-group-text">
+              <i class="fas fa-tint"></i>
+            </span>
+          </div>
+
+
+          <div class="input-group-append">
+            <span class="input-group-text">
+              Pressure
+            </span>
+            <span class="input-group-text">
+              <div id="pre"></div>
+            </span>
+          </div>
+
+          <div class="input-group-append">
+            <span class="input-group-text">
+              <i class="fas fa-thermometer-full"></i>
+            </span>
+          </div>
+        </div>
+
+
+
+
+        
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><div id = "des"></div> <img id="weather" style="width: 50px" src=""> </span>
+          </div>
+           
+          <div class="input-group-append">
+            <span class="input-group-text">
+              <div id = "loc"></div>
+              <img id="flag" src="">
+            </span>
+          </div>
+          <div class="input-group-append">
+            <span class="input-group-text">
+              <div id = "date"></div>
+            </span>
+          </div>
+          <div class="input-group-append">
+            <span class="input-group-text">
+              Visibility &nbsp;
+              <i class="fas fa-eye"> &nbsp;</i> <div id = 'vis'></div> 
+            </span>
+          </div>
+        </div>
+      </div>
+     
+        <div id="mapdiv" class="map "></div>
+        
       </div>
     </div>
   </div>
 </div>
 
  <div id="content"  class="mb-2" style="display:none;">
-  <div class="row px-2">
 
-      <div class="col-4 ">
-      <div > <h4><div id = "temp"></div></h4></div>
-      <div ><img id="weather" style="width: 50px" src=""> <h4><div id = "des"></div></h4>  </div>
-      <hr>
-      <div > <h4>Feels like<div id = "like"></div></h4></div>
-      <div > <h4>Max <div id = "min"></div></h4> </div>
-      <div > <h4>Min <div id = "max"></div></h4> </div>
-    </div>
-
-    <div class="col-4 "><h4>Wind Speed <i class="fas fa-wind"></i><div id="wind"></div></h4>
-    <hr>
-    <h4> Direction <i class="far fa-compass"></i><div id="dir"></div> </h4>
-    <hr>
-    <h4> Humadity <i class="fas fa-tint"></i><div id="hum"></div> </h4>
-    <hr>
-    <h4> Pressure <i class="fas fa-thermometer-full"></i><div id="pre"></div> </h4>
-    </div>
-
-    <div class="col-4 ">
-      <div> <h4>  <div id = "date"></div> </h4></div>
-      <div> <h4><div id = "loc"></div>  </h4></div>
-      <img id="flag" src="">
-     
-      <div><h4>  Visibility  <i class="fas fa-eye"></i> <div id = 'vis'></div></h4> </div>
-      <button type="button" id='showModal' class="btn btn-light" data-toggle="modal" data-target="#myModal">
-        Map <i class="fas fa-external-link-alt"></i>
-      </button>
-    </div>
-  </div>
- 
 </div>
   
 

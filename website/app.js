@@ -233,7 +233,7 @@ checkApiKeyIsSuppliedInCode = ()=>{
         const x =document.querySelector('.form-inline');
         x.style.display='block';
     }else{
-        showToastWithTitleAndMessageWithDelay('Success','Api Key have been sucessfully')
+        showToastWithTitleAndMessageWithDelay('Success','Api Key have been successfully added',3000);
         apiKey.value=apiKeyString;
     }
 }
@@ -609,9 +609,9 @@ changeInenerHTMLContentById = (content,id) => {
 */
 getDegreeUnitFromUnit = ()=>{
     switch(unitSelect.value){
-        case '&units=metric': return ' &#8451' ;break;
-        case '&units=imperial': return ' &#8457;' ;break;
-        default: return ' &#8490;' ;break;
+        case '&units=metric': return ' &#176;&#8451' ;break;
+        case '&units=imperial': return ' &#176;&#8457;' ;break;
+        default: return ' &#176;&#8490;' ;break;
     }
 }
 
@@ -717,6 +717,15 @@ showToastWithTitleAndMessageWithDelay = (title, message, delay)=>{
 
 }
   
+setUnitOfInnerHTML = (unit)=>{
+
+    const x = document.querySelectorAll('.holder');
+     for(item of x){
+        
+        item.innerHTML= " "+unit;
+     }
+}
+
 
 
 /**
@@ -737,12 +746,11 @@ getWeatherDataFromOpenWeartherApi = async url => {
     let completeUrl = url+unitSelect.value+languageSelect.value;
     const response = await fetch(completeUrl);
     try{
-    
       
        const data = await response.json();
        
         if(data.cod===200){
-       showHiddenContentDivById('content');
+      // showHiddenContentDivById('content');
        let unit = getDegreeUnitFromUnit();
        console.log(data);
        getCountryFlageByCountryCodeAndStyle(flag, data.sys.country,'flat');
@@ -751,24 +759,35 @@ getWeatherDataFromOpenWeartherApi = async url => {
        coord=data.coord;
       
       // intilizeMap(data.coord);
-        weather.src=getIconById(data.weather[0].icon);
+       weather.src=getIconById(data.weather[0].icon);
       
+        document.querySelector('#temp').innerHTML=current.temp+" "+unit;
 
-       changeDivInnerHTML(temp,current.temp+unit);
+        document.querySelector('#like').innerHTML=current.feels_like+" "+unit;
+        document.querySelector('#min').innerHTML=current.temp_min+" "+unit;
+        document.querySelector('#max').innerHTML=current.temp_max+" "+unit;
+
+  
+
+        document.querySelector('#wind').innerHTML=data.wind.speed+" &#13218;";
+        document.querySelector('#dir').innerHTML=data.wind.deg+"&deg;";
+
+        document.querySelector('#hum').innerHTML=current.humidity;
+        document.querySelector('#pre').innerHTML=current.pressure;
+
+
+        setUnitOfInnerHTML(unit);
+
+       //changeDivInnerHTML(temp,current.temp);
+
        changeDivInnerHTML(description,data.weather[0].description);
        changeDivInnerHTML(date,`${getCurrentMonthName()}, ${getCurrentDay()}`);
 
        changeInenerHTMLContentById(`${data.name},${data.sys.country}`,'loc');
-       changeInenerHTMLContentById(data.wind.speed,'wind');
-       changeInenerHTMLContentById(data.wind.deg,'dir');
-       changeInenerHTMLContentById(current.humidity,'hum');
-       changeInenerHTMLContentById(current.pressure,'pre');
+       
        changeInenerHTMLContentById(data.visibility+" &#13214;",'vis')
-    
+       setTimeout(intilizeMap,1000,coord);
 
-       changeInenerHTMLContentById(current.feels_like+unit,'like');
-       changeInenerHTMLContentById(current.temp_min+unit,'min');
-       changeInenerHTMLContentById(current.temp_max+unit,'max');
     }
     }catch(error){
         showToastWithTitleAndMessageWithDelay('Error',error,3000);
@@ -862,9 +881,4 @@ retrieveButton.addEventListener('click' , (e)=>{
     
 });
 
-select('#showModal').addEventListener('click', (e)=>{
-    e.preventDefault();
-    setTimeout(intilizeMap,1,coord);
-   
-})
 
