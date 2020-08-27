@@ -51,14 +51,22 @@ color: #eee;
     width: 100%;
 }
 
+
+.navbar-brand{
+     font-family: 'Lobster', cursive;
+    /*font-family: 'Bubblegum Sans', cursive;*/
+}
+
 .toast{
     background: rgba(99,99,99,1);
     color: #eee;
     border:solid 1px #eee;
    
 }
-.active{
-    text-shadow: 2px 2px 4px #000000;
+li .active{
+ 
+    text-shadow: 2px 2px 2px #000;
+   
 }
 
 .form-control {
