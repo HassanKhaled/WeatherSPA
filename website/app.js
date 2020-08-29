@@ -70,9 +70,7 @@ const languages = [{value:'&lang=ar',text:'Arabic'}
     @global
     @description Hold links' names.
 */
-const links = [{href:"index.html",text:"Current"},{href:"hourly.html",text:"Hourly"},
-               {href:"daily.html",text:"Daily"},{href:"climate.html",text:"Climate"},
-               {href:"5days.html",text:"5 Days"}] 
+const links = [{href:"index.html",text:"Current"}] 
 
 
 /** @constant
@@ -81,6 +79,15 @@ const links = [{href:"index.html",text:"Current"},{href:"hourly.html",text:"Hour
     @description Hold reference to open weather map api url.
 */
 const baseApiUrl = 'https://api.openweathermap.org/data/2.5/weather';
+
+
+/** @constant
+    @type {string}
+    @global
+    @description Hold reference to open weather one call url.
+*/
+const baseOneCallUrl = 'https://api.openweathermap.org/data/2.5/onecall';
+
 
 /** @type {object}
     @global
@@ -269,15 +276,19 @@ const visisablity = select('#vis');
 */
 
 
-//################################################################
 
+/**
+* @function  setTheme
+* @description change the current theme with provided theme name .
+* @param {string}  theme to be set for the entire document.
+*/
 setTheme = (theme)=>{
     let x= document.getElementById('bulb');
     if(theme==='light'){
     
-      x.classList.remove('fas');
-      x.classList.add('far');
-      x.title="light on";
+        x.classList.remove('fas');
+        x.classList.add('far');
+        x.title="light on";
     }else{
         x.classList.remove('far');
         x.classList.add('fas');
@@ -288,6 +299,11 @@ setTheme = (theme)=>{
     document.documentElement.className=theme;
 }
 
+
+/**
+* @function  toggleTheme
+* @description toggle between two themes .
+*/
 toggleTheme = () =>{
 
     if(localStorage.getItem('theme')==='light')
@@ -297,12 +313,16 @@ toggleTheme = () =>{
 }
 
 
+/**
+* @function  RetrieveTheme
+* @description retrieves the theme from the local storage .
+*/
 RetrieveTheme = () =>{
     const theme = localStorage.getItem('theme')
     setTheme(theme);
 }
 
-RetrieveTheme();
+
 
 checkApiKeyIsSuppliedInCode = ()=>{
 
@@ -404,7 +424,7 @@ filLanguageSelect= (target) =>{
 * @description call methods  .
 */
 start = () =>{
-
+    RetrieveTheme();
     generateDynamicNavbar();
     setActiveClassForNavBarFromUrl();
     filLanguageSelect(languageSelect);
@@ -445,13 +465,8 @@ getCountryFlageByCountryCodeAndStyle =( imageElement,code,style )=> {
 */
 drawOpenLayersMapOnPage = coord =>{
     try{
-    
     map = new OpenLayers.Map("mapdiv");
-   
     map.addLayer(new OpenLayers.Layer.OSM());
-  
-    
-
     var lonLat = new OpenLayers.LonLat( coord.lon ,coord.lat)
           .transform(
             new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
@@ -459,11 +474,8 @@ drawOpenLayersMapOnPage = coord =>{
           );
         
     var zoom=16;
-    
     var markers = new OpenLayers.Layer.Markers( "Markers" );
-  
     map.addLayer(markers);
-    
     markers.addMarker(new OpenLayers.Marker(lonLat));
     map.setCenter (lonLat, zoom);}
     catch(error){
@@ -481,18 +493,13 @@ drawOpenLayersMapOnPage = coord =>{
 */
 intilizeMap = coord => {
 
-
 let x =document.getElementById('mapdiv').children.length;
 
    if(x===0){
         drawOpenLayersMapOnPage(coord);
-        console.log('finished',x);
     }else if(x===1){
-        console.log('not');
         let  temp  = document.getElementById('mapdiv');
-        console.log('not 1');
         temp.removeChild(temp.children[0]);
-        console.log('not 2');
         drawOpenLayersMapOnPage(coord);
     }
 }
@@ -542,8 +549,17 @@ fullCityUrl = city =>{return`${baseApiUrl}?q=${city}&appid=${text(apiKey)}`;}
 * @param {string} lon
 * @returns {string} Complete url to the open weather map api with latitude and longitude 
 */
-fullLatLonUrl = (lat, lon) =>{return`${baseApiUrl}?lat=${lat}&lon=${lon}&appid=${text(apiKey)}`;}
+fullLatLonUrl = (lat, lon) =>{return`${baseApiUrl}?lat=${lat}&lon=${lon}&exclude=minutely,hourly&appid=${text(apiKey)}`;}
 
+
+/**
+* @function  fullOneCallApiUrl
+* @description Return a complete url for open weather map api with temp in metric system city search
+* @param {string} lat
+* @param {string} lon
+* @returns {string} Complete url to the open weather map api with latitude and longitude 
+*/
+fullOneCallApiUrl = (lat, lon) =>{return`${baseOneCallUrl}?lat=${lat}&lon=${lon}&exclude=minutely&appid=${text(apiKey)}`;}
 
 
 /**
@@ -811,6 +827,48 @@ setUnitOfInnerHTML = (unit)=>{
  *
 */
 
+
+
+ /**
+* @async
+* @function  getWeatherDataFromOpenWeartherApi
+* @description Return the text value of any input element specified in the parameter 
+* @param {string} url For get action usually the open weather map api call to get temprature 
+* @returns {object} Consisted of three value date, temperature and finally feeling of the user
+*/
+getWeatherDataFromOpenWeartherApiOneCall = async url => {
+ 
+    let completeUrl = url+unitSelect.value+languageSelect.value;
+  
+    const response = await fetch(completeUrl);
+    try{
+       console.log("one call api");
+       const data = await response.json();
+       console.log(data);
+        let unit = getDegreeUnitFromUnit();
+        weather.src=getIconById(data.current.weather[0].icon);
+        document.querySelector('#temp').innerHTML=data.current.temp+" "+unit;
+        document.querySelector('#like').innerHTML=data.current.feels_like+" "+unit;
+        document.querySelector('#wind').innerHTML=data.current.wind_speed+" &#13223;";
+        document.querySelector('#dir').innerHTML=data.current.wind_deg+"&deg;";
+        document.querySelector('#hum').innerHTML=data.current.humidity;
+        document.querySelector('#pre').innerHTML=data.current.pressure;
+        document.querySelector('#min').innerHTML=data.current.dew_point+" "+unit;
+        document.querySelector('#max').innerHTML=data.current.clouds+" &percnt;" ;
+        changeInenerHTMLContentById(data.current.visibility+" &#13214;",'vis');
+        changeInenerHTMLContentById(data.current.uvi,'uvi')
+
+        setUnitOfInnerHTML(unit);
+        changeDivInnerHTML(description,data.current.weather[0].description);
+
+        
+    }catch(error){
+        showToastWithTitleAndMessageWithDelay('Error',error,3000);
+    }
+}
+
+
+
  /**
 * @async
 * @function  getWeatherDataFromOpenWeartherApi
@@ -821,48 +879,36 @@ setUnitOfInnerHTML = (unit)=>{
 getWeatherDataFromOpenWeartherApi = async url => {
    
     let completeUrl = url+unitSelect.value+languageSelect.value;
+    
     const response = await fetch(completeUrl);
     try{
       
        const data = await response.json();
-       
+       console.log(data);
         if(data.cod===200){
-      // showHiddenContentDivById('content');
+      
        let unit = getDegreeUnitFromUnit();
        console.log(data);
        getCountryFlageByCountryCodeAndStyle(flag, data.sys.country,'flat');
        
        let current = data.main;
        coord=data.coord;
-      
-      // intilizeMap(data.coord);
+       getWeatherDataFromOpenWeartherApiOneCall(fullOneCallApiUrl(coord.lat,coord.lon))
+      /*
        weather.src=getIconById(data.weather[0].icon);
-      
         document.querySelector('#temp').innerHTML=current.temp+" "+unit;
-
         document.querySelector('#like').innerHTML=current.feels_like+" "+unit;
         document.querySelector('#min').innerHTML=current.temp_min+" "+unit;
         document.querySelector('#max').innerHTML=current.temp_max+" "+unit;
-
-  
-
         document.querySelector('#wind').innerHTML=data.wind.speed+" &#13218;";
         document.querySelector('#dir').innerHTML=data.wind.deg+"&deg;";
-
         document.querySelector('#hum').innerHTML=current.humidity;
         document.querySelector('#pre').innerHTML=current.pressure;
-
-
-        setUnitOfInnerHTML(unit);
-
-       //changeDivInnerHTML(temp,current.temp);
-
+       setUnitOfInnerHTML(unit);
        changeDivInnerHTML(description,data.weather[0].description);
        changeDivInnerHTML(date,`${getCurrentMonthName()}, ${getCurrentDay()}`);
-
-       changeInenerHTMLContentById(`${data.name},${data.sys.country}`,'loc');
-       
-       changeInenerHTMLContentById(data.visibility+" &#13214;",'vis')
+       changeInenerHTMLContentById(`${data.name},${data.sys.country}`,'loc');       
+       changeInenerHTMLContentById(data.visibility+" &#13214;",'vis')*/
        setTimeout(intilizeMap,1000,coord);
 
     }
@@ -870,6 +916,8 @@ getWeatherDataFromOpenWeartherApi = async url => {
         showToastWithTitleAndMessageWithDelay('Error',error,3000);
     }
 }
+
+
 
 
 
