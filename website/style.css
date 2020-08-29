@@ -1,48 +1,78 @@
+.light{
+    --color-1: #fff;
+    --color-2: #f6f6f6;
+    --color-3: #999494;
+    --color-4: #e1e1e1;
+    --color-5: #d0d0d0;
+    --color-6: #4a4848;
+    --color-7: #000;
+    --color-8: #8a8a8a;
+    --color-9:rgba(99,99,99,1);
+    --color-10: rgb(161, 161, 161);
+    
+
+}
+
+.dark{
+    --color-1: #111;
+    --color-2: #333;
+    --color-3: #555;
+    --color-4: #777;
+    --color-5: #999;
+    --color-6: #eee;
+    --color-7: #fff;
+    --color-8: #808080;
+    --color-9: rgb(161, 161, 161);
+    --color-10:rgba(99,99,99,1);
+}
+
+
+
 
 .form-control::-webkit-input-placeholder { /* Edge */
     font-family: Cairo;
-    color: #999;
+    color: var(--color-5);
   }
   
   .form-control:-ms-input-placeholder { /* Internet Explorer 10-11 */
     font-family: Cairo;
-    color: #999;
+    color: var(--color-5);
   }
   
   .form-control::placeholder {
     font-family: Cairo;
-    color: #999;
+    color: var(--color-5);
   }
 
 
 body{
     font-family: Cairo;
-    background: #111;
+    background: var(--color-1);
 }
 
 select{
-    background-color: #555;
-    color:#999;
-    border:solid 1px #777;
+    background-color: var(--color-3);
+    color:var(--color-5);
+    border:solid 1px var(--color-4);
 }
 
 option{
-    background-color: #555;
-    color:#999;
-    border:solid 1px #777;
+    background-color: var(--color-3);
+    color:var(--color-9);
+    border:solid 1px var(--color-4);
 }
 
 
 .test{
-background-color: #808080;
-color: #eee;
+background-color: var(--color-8);
+color: var(--color-6);
 }
 
 .modal-content{
 
-    background-color: #555;
-    color:#999;
-    border:solid 1px #777;
+    background-color: var(--color-3);
+    color:var(--color-5);
+    border:solid 1px var(--color-4);
 }
 
 
@@ -55,26 +85,25 @@ color: #eee;
 
 .navbar-brand{
      font-family: 'Lobster', cursive;
-    /*font-family: 'Bubblegum Sans', cursive;*/
 }
 
 .toast{
-    background: rgba(99,99,99,1);
-    color: #eee;
-    border:solid 1px #eee;
+    background: var(--color-10);
+    color: var(--color-6);
+    border:solid 1px var(--color-6);
    
 }
 li .active{
  
-    text-shadow: 2px 2px 2px #000;
+    text-shadow: 2px 2px 2px var(--color-1);
    
 }
 
 .form-control {
 
-    background-color: #555;
-    color:#eee;
-    border:solid 1px #777;
+    background-color: var(--color-3);
+    color:var(--color-6);
+    border:solid 1px var(--color-4);
 }
 
 h1,
@@ -82,75 +111,42 @@ h2,
 h3,
 h4,
 h5{
-    color: #eee;
+    color: var(--color-6);
 }
 
 input[type=text]:focus {
-    background-color: #555;
-    color:#eee;
-    border:solid #eee 0.5px;
+    background-color: var(--color-3);
+    color:var(--color-6);
+    border:solid var(--color-6) 0.5px;
 }
 
 #content{
     
     border-radius: 5px;
-    background-color: #555;
-    color: #eee;
-    border:solid 1px #777;
+    background-color: var(--color-3);
+    color: var(--color-6);
+    border:solid 1px var(--color-4);
 }
 
 .container{
-    border-left-style: solid 1px #777; 
-    border-right-style: solid 1px #777;
-    background:#333; 
-    color: #fff;
+    border-left-style: solid 1px var(--color-4); 
+    border-right-style: solid 1px var(--color-4);
+    background:var(--color-2); 
+    color: var(--color-7);
 }
 
 .btn-light{
 
-    background: #eee;
-    border:solid 1px #777;
+    background: var(--color-6);
+    color:var(--color-2);
+    border:solid 1px var(--color-4);
 
 }
 
 .input-group-text{
-    background: #999;
-    color:#eee;
-    border:solid 1px #777;
-}
-
-.entry{
-    background: rgba(59, 74, 107, .4);
-}
-
-#entryHolder{
-    margin: auto;
-}
-
-#date{
-margin: auto;
-}
-
-#temp{
-margin: auto;
-}
-
-
-/*  Basic Styling To Override Default For Basic HTML Elements */
-label{
-    display:block;
-    font-size: 27px;
-}
-
-input{
-    display:block;
-    height: 60px;
-    width: 320px;
-    background:#22b2da;
-    color: #f0d43a;
-    font-size: 20px;
-    font-family: 'Oswald', sans-serif;
-    border: none;
+    background: var(--color-5);
+    color:var(--color-6);
+    border:solid 1px var(--color-4);
 }
 
 
