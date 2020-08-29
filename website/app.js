@@ -18,9 +18,52 @@ const months= ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
     @global
     @description Hold languages' names.
 */
-const languages = [{value:'&lang=ar',text:'Arabic'},{value:'&lang=de',text:'German'},
-                   {value:'&lang=en',text:'English'},{value:'&lang=fr',text:'French'},
-                   {value:'&lang=it',text:'Italian'}];
+const languages = [{value:'&lang=ar',text:'Arabic'}
+                  ,{value:'&lang=de',text:'German'},
+                   {value:'&lang=en',text:'English'},
+                   {value:'&lang=fr',text:'French'},
+                   {value:'&lang=it',text:'Italian'},
+                   {value:'&lang=af',text:'Afrikaans'},
+                   {value:'&lang=al',text:'Albanian'},
+                   {value:'&lang=az',text:'Azerbaijani'},
+                   {value:'&lang=bg',text:'Bulgarian'},
+                   {value:'&lang=ca',text:'Catalan'},
+                   {value:'&lang=cz',text:'Czech'},
+                   {value:'&lang=da',text:'Danish'},
+                   {value:'&lang=el',text:'Greek'},
+                   {value:'&lang=eu',text:'Basque'},
+                   {value:'&lang=fa',text:'Persian (Farsi)'},
+                   {value:'&lang=fi',text:'Finnish'},
+                   {value:'&lang=gl',text:'Galician'},
+                   {value:'&lang=he',text:'Hebrew'},
+                   {value:'&lang=hi',text:'Hindi'},
+                   {value:'&lang=hr',text:'Croatian'},
+                   {value:'&lang=hu',text:'Hungarian'},
+                   {value:'&lang=id',text:'Indonesian'},
+                   {value:'&lang=ja',text:'Japanese'},
+                   {value:'&lang=kr',text:'Korean'},
+                   {value:'&lang=la',text:'Latvian'},
+                   {value:'&lang=it',text:'Lithuanian'},
+                   {value:'&lang=mk',text:'Macedonian'},
+                   {value:'&lang=no',text:'Norwegian'},
+                   {value:'&lang=nl',text:'Dutch'},
+                   {value:'&lang=pl',text:'Polish'},
+                   {value:'&lang=pt',text:'Portuguese'},
+                   {value:'&lang=pt_br',text:'Portuguese (Brazil)'},
+                   {value:'&lang=ro',text:'Romanian'},
+                   {value:'&lang=ru',text:'Russian'},
+                   {value:'&lang=sv',text:'Swedish'},
+                   {value:'&lang=sk',text:'Slovak'},
+                   {value:'&lang=sl',text:'Slovenian'},
+                   {value:'&lang=sp',text:'Spanish'},
+                   {value:'&lang=sr',text:'Serbian'},
+                   {value:'&lang=th',text:'Thai'},
+                   {value:'&lang=tr',text:'Turkish'},
+                   {value:'&lang=ua',text:'Ukrainian'},
+                   {value:'&lang=vi',text:'Vietnamese'},
+                   {value:'&lang=zh_cn',text:'Chinese Simplified'},
+                   {value:'&lang=zh_tw',text:'Chinese Traditional'},
+                   {value:'&lang=zu',text:'Zulu'}]
 
 /** @constant
     @type {array}
@@ -402,32 +445,32 @@ getCountryFlageByCountryCodeAndStyle =( imageElement,code,style )=> {
 */
 drawOpenLayersMapOnPage = coord =>{
     try{
-    console.log('1');
+    
     map = new OpenLayers.Map("mapdiv");
-    console.log('2');
+   
     map.addLayer(new OpenLayers.Layer.OSM());
-    console.log('3');
+  
+    
+
     var lonLat = new OpenLayers.LonLat( coord.lon ,coord.lat)
           .transform(
             new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-            map.getProjectionObject() // to Spherical Mercator Projection
+            map.getProjectionObject(), // to Spherical Mercator Projection
           );
-          console.log('4');
+        
     var zoom=16;
-    console.log('5');
+    
     var markers = new OpenLayers.Layer.Markers( "Markers" );
-    console.log('6');
+  
     map.addLayer(markers);
-    console.log('7');
+    
     markers.addMarker(new OpenLayers.Marker(lonLat));
-    console.log('8');
     map.setCenter (lonLat, zoom);}
     catch(error){
         console.log('catch');
         showToastWithTitleAndMessageWithDelay("Error",error,3000);
     }
-    console.log('9');
-
+ 
 }
 
 
