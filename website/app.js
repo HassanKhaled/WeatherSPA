@@ -916,9 +916,12 @@ retrieveButton.addEventListener('click' , (e)=>{
 });
 
 
-document.getElementById('bulb').addEventListener('click', (e)=>{
-
+document.getElementById('light').addEventListener('click', (e)=>{
+    e.preventDefault();
     toggleTheme();
 })
 
-
+document.getElementById('setting').addEventListener('click', (e)=>{
+    e.preventDefault();
+    
+})

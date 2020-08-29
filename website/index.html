@@ -41,19 +41,10 @@
      
    
     </div>
-    <i id="bulb" class="far fa-lightbulb"></i>
-
-    <div class="custom-control custom-switch">
-      <input type="checkbox" class="custom-control-input" id="switch1">
-    </div>
     
-    <form class="form-inline" style='display:none'>
-     
-      <input type="text" class="form-control" placeholder="enter api key here"  id="api" >
-      <button class="btn btn-light "  title="delete api key from local storage"  id='del'> <i class="fas fa-trash-alt"></i></button>
-      <button class="btn btn-light " title="retrieve api key from local storage" id='ret'> <i class="fas fa-exchange-alt"></i></button>
-      <button class="btn btn-light "  title="save api key to local storage" id='save'> <i class="fas fa-save"></i></button>
-    </form>
+
+    <button class="btn btn-light "   data-toggle="modal" data-target="#settingModal" id="setting" title="change user setting"> <i class="fas fa-sliders-h"></i></button>
+
   </nav> 
 
 
@@ -150,6 +141,56 @@
 
     <button type="button" id="get" data-toggle="modal" data-target="#myModal" class="btn btn-light btn-block mb-2">Get Data  <i class="fas fa-search-location"></i></button>
   </form>
+
+
+
+
+<!-- The Modal -->
+<div class="modal" id="settingModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header ##########################################-->
+      <div class="modal-header">
+        <h4 class="modal-title">User Setting</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+          <form class="form-inline" >
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Theme</span>
+              </div>
+              <button class="btn btn-light " id="light" title="toggle lights on and off"> <i id="bulb" class="far fa-lightbulb"></i></button>
+            </div>
+          
+      
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Api Key</span>
+        </div>
+        <input type="text" class="form-control" placeholder="enter api key here"  id="api">
+        <div class="input-group-append">
+          <button class="btn btn-light "  title="delete api key from local storage"  id='del'> Delete <i class="fas fa-trash-alt"></i></button>
+          <button class="btn btn-light " title="retrieve api key from local storage" id='ret'> Retrieve <i class="fas fa-exchange-alt"></i></button>
+          <button class="btn btn-light "  title="save api key to local storage" id='save'>  Save<i class="fas fa-save"></i></button>    
+        </div>
+      </div>
+
+
+    
+    </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
 
 <!-- The Modal -->
 <div class="modal fade " id="myModal">
