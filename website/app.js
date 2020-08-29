@@ -226,6 +226,40 @@ const visisablity = select('#vis');
 */
 
 
+//################################################################
+
+setTheme = (theme)=>{
+    let x= document.getElementById('bulb');
+    if(theme==='light'){
+    
+      x.classList.remove('fas');
+      x.classList.add('far');
+      x.title="light on";
+    }else{
+        x.classList.remove('far');
+        x.classList.add('fas');
+        x.title="light off";
+    }
+    
+    localStorage.setItem('theme',theme);
+    document.documentElement.className=theme;
+}
+
+toggleTheme = () =>{
+
+    if(localStorage.getItem('theme')==='light')
+        setTheme('dark');
+    else 
+        setTheme('light');
+}
+
+
+RetrieveTheme = () =>{
+    const theme = localStorage.getItem('theme')
+    setTheme(theme);
+}
+
+RetrieveTheme();
 
 checkApiKeyIsSuppliedInCode = ()=>{
 
@@ -880,5 +914,11 @@ retrieveButton.addEventListener('click' , (e)=>{
     apiKey.value= getDataFromLocalStorage('api')
     
 });
+
+
+document.getElementById('bulb').addEventListener('click', (e)=>{
+
+    toggleTheme();
+})
 
 
