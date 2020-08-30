@@ -166,6 +166,13 @@ const  description=select("#des");
 */
 const getButton = select('#get');
 
+/** @constant
+    @type {object}
+    @global
+    @description Hold reference to get button html element.
+*/
+const dailyList = select('#daily');
+
 
 /** @constant
     @type {object}
@@ -300,6 +307,49 @@ setTheme = (theme)=>{
 }
 
 
+
+allTemperatures =(obj,unit)=>{ 
+    return `Day:${obj.day+unit}\n 
+    Evening:${obj.eve+unit} Morning:${obj.morn+unit} Night:${obj.night+unit} Max:${obj.max+unit} Min:${obj.min+unit}`
+     }
+
+
+/**
+* @function  extractObjectDataFromResponseData
+* @description extract data from the api response and represent it in a clearer manner.
+* @param {object}  item object from the api reponse.
+* @returns {object} object to represent the clear version of the resposne 
+*/
+extractObjectDataFromResponseData = (item) =>{
+    console.log("in method",item);
+    
+   return {dateTime:item.dt, 
+          sunRise:item.sunrise,
+          sunSet:item.sunset,
+          temperature:item.temp,
+        
+          allData: function (unit) { return [`${getDateFromSeconds(this.dateTime)}` , `${allTemperatures(this.temperature,unit)}`]; } 
+}}
+
+
+/**
+* @function  
+* @description extract data from the api response and represent it in a clearer manner.
+* @param {object}  item object from the api reponse.
+* @returns {object} object to represent the clear version of the resposne 
+*/
+createListItemFromObject = (object) =>{
+    let listItem =document.createElement("li");
+
+    let dateTimeDiv =document.createElement("div");
+    dateTimeDiv.textContent=object.dateTime;
+
+
+ 
+ }
+
+
+
 /**
 * @function  toggleTheme
 * @description toggle between two themes .
@@ -323,7 +373,10 @@ RetrieveTheme = () =>{
 }
 
 
-
+/**
+* @function  checkApiKeyIsSuppliedInCode
+* @description check for apikey in the code if exist show success message otherwise it make api key section visiable .
+*/
 checkApiKeyIsSuppliedInCode = ()=>{
 
     if(apiKeyString===''){
@@ -518,11 +571,29 @@ function select(query){
 
 
 /**
-* @function  getDate
-* @description Return object selected by querySelector specified by the query 
-* @returns {string} Current date concatenated with current time 
+* @function  getDateFromSeconds
+* @description convert date from seconds in to string 
+* @param {number} seconds represent the number  of second in the current date
+* @returns {string} complete date in string
 */
-getDate = ()=> { return `${currentDate()} ${currentTime()}`}
+getDateFromSeconds = (seconds)=> { 
+    let x = new Date(seconds* 1000);
+    let t = x.toUTCString().slice(0,16);
+
+    return `${t}`}
+
+
+/**
+* @function  getTimeFromSeconds
+* @description convert Time from seconds in to string 
+* @param {number} seconds represent the number  of second in the current date
+* @returns {string} complete time  in string
+*/
+getTimeFromSeconds = (seconds)=> { 
+    let x = new Date(seconds* 1000);
+    let t = x.toUTCString().slice(15,25);
+
+    return `${t}`}
 
 
 /**
@@ -559,7 +630,7 @@ fullLatLonUrl = (lat, lon) =>{return`${baseApiUrl}?lat=${lat}&lon=${lon}&exclude
 * @param {string} lon
 * @returns {string} Complete url to the open weather map api with latitude and longitude 
 */
-fullOneCallApiUrl = (lat, lon) =>{return`${baseOneCallUrl}?lat=${lat}&lon=${lon}&exclude=minutely&appid=${text(apiKey)}`;}
+fullOneCallApiUrl = (lat, lon) =>{return`${baseOneCallUrl}?lat=${lat}&lon=${lon}&exclude=&appid=${text(apiKey)}`;}
 
 
 /**
@@ -844,7 +915,7 @@ getWeatherDataFromOpenWeartherApiOneCall = async url => {
     try{
        console.log("one call api");
        const data = await response.json();
-       console.log(data);
+      // console.log(data);
         let unit = getDegreeUnitFromUnit();
         weather.src=getIconById(data.current.weather[0].icon);
         document.querySelector('#temp').innerHTML=data.current.temp+" "+unit;
@@ -857,6 +928,39 @@ getWeatherDataFromOpenWeartherApiOneCall = async url => {
         document.querySelector('#max').innerHTML=data.current.clouds+" &percnt;" ;
         changeInenerHTMLContentById(data.current.visibility+" &#13214;",'vis');
         changeInenerHTMLContentById(data.current.uvi,'uvi')
+
+        for(day of data.daily){
+            let res = extractObjectDataFromResponseData(day);
+            let li = document.createElement('li');
+           
+            let span =  document.createElement('span');
+          
+            span.classList.add('badge');
+            span.classList.add('badge-dark');
+            span.classList.add('badge-pill');
+           
+            span.innerHTML=res.allData(unit)[0];
+
+
+            li.appendChild(span);
+
+           let text = document.createElement('span');
+           text.innerHTML=res.allData(unit)[1];
+       
+           li.appendChild(text);
+            
+
+            li.classList.add('list-group-item');
+            li.classList.add('list-group-item-dark');
+
+           
+            daily.appendChild(li);
+
+
+            
+            
+            
+        }
 
         setUnitOfInnerHTML(unit);
         changeDivInnerHTML(description,data.current.weather[0].description);
@@ -884,7 +988,7 @@ getWeatherDataFromOpenWeartherApi = async url => {
     try{
       
        const data = await response.json();
-       console.log(data);
+      // console.log(data);
         if(data.cod===200){
       
        let unit = getDegreeUnitFromUnit();
