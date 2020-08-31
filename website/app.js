@@ -333,8 +333,8 @@ extractObjectDataFromResponseData = (item) =>{
 }}
 
 
-extractObjectFromHourData = (item) => {
 
+extractObjectFromHourData = (item) => {
         return {
             hour:item.dt,
             cloud:item.clouds,
@@ -360,11 +360,8 @@ extractObjectFromHourData = (item) => {
              `${this.sub}`,
              `${this.icon}` ]}
         }
-
-
-
-
 }
+
 
 /**
 * @function  
@@ -561,6 +558,7 @@ drawOpenLayersMapOnPage = coord =>{
     map.setCenter (lonLat, zoom);}
     catch(error){
         console.log('catch');
+        console.log(error);
         showToastWithTitleAndMessageWithDelay("Error",error,3000);
     }
  
@@ -968,6 +966,18 @@ createWeatherImageFromIconId = (id) =>{
 return x;
 }
 
+createListItem = () =>{
+    return document.createElement('li');
+}
+
+
+appendChildToListItem = (li,ele)=>{
+
+    li.appendChild(ele);
+} 
+
+
+
 
 /**
  * End Helper Functions
@@ -975,7 +985,12 @@ return x;
  *
 */
 
+extractObjectFromMinuteData =(item)=>{
+    return { min:item.dt,
+            rain:item.precipitation,
+            allData: function (){return [`${getTimeFromSeconds( this.min)}`,`${this.rain}`]}}
 
+}
 
  /**
 * @async
@@ -1004,9 +1019,20 @@ getWeatherDataFromOpenWeartherApiOneCall = async url => {
         document.querySelector('#min').innerHTML=data.current.dew_point+" "+unit;
         document.querySelector('#max').innerHTML=data.current.clouds+" &percnt;" ;
         changeInenerHTMLContentById(data.current.visibility+" &#13214;",'vis');
-        changeInenerHTMLContentById(data.current.uvi,'uvi')
-
-
+        changeInenerHTMLContentById(data.current.uvi,'uvi');
+        for(minute of data.minutely){
+            let res = extractObjectFromMinuteData(minute);
+            console.log(res);
+            let li = createListItem();
+            li.classList.add('list-group-item');
+            li.classList.add('list-group-item-dark');
+            let min = createNewSpanFromStyleContent('badge-dark',amOrPmFromString(res.allData()[0].slice(2,)));
+            let rain = createNewSpanFromStyleContentWithIcon('badge-dark',res.allData()[1]+" &#13212; ",['fas','fa-cloud-rain']);
+            li.appendChild(min);
+            li.appendChild(rain);
+            dailyList.appendChild(li);
+        }
+        /*
         for(hour of data.hourly){
            const res = extractObjectFromHourData(hour);
            let li = document.createElement('li');
@@ -1021,7 +1047,6 @@ getWeatherDataFromOpenWeartherApiOneCall = async url => {
            
            let img = createWeatherImageFromIconId(res.icon);
            
-
 
            li.appendChild(time);
            li.appendChild(temp);
@@ -1038,7 +1063,9 @@ getWeatherDataFromOpenWeartherApiOneCall = async url => {
            li.classList.add('list-group-item-dark');
            daily.appendChild(li);
 
-        }
+        }*/
+
+
         /*
         for(day of data.daily){
             let res = extractObjectDataFromResponseData(day);
@@ -1059,13 +1086,14 @@ getWeatherDataFromOpenWeartherApiOneCall = async url => {
 
         setUnitOfInnerHTML(unit);
         changeDivInnerHTML(description,data.current.weather[0].description);
-
+        setTimeout(intilizeMap,1000,coord);
         
     }catch(error){
+        console.log(error);
         showToastWithTitleAndMessageWithDelay('Error',error,3000);
     }
 }
-getTimeFromSeconds
+
 
 
  /**
@@ -1083,7 +1111,7 @@ getWeatherDataFromOpenWeartherApi = async url => {
     try{
       
        const data = await response.json();
-      // console.log(data);
+
         if(data.cod===200){
       
        let unit = getDegreeUnitFromUnit();
@@ -1093,23 +1121,7 @@ getWeatherDataFromOpenWeartherApi = async url => {
        let current = data.main;
        coord=data.coord;
        getWeatherDataFromOpenWeartherApiOneCall(fullOneCallApiUrl(coord.lat,coord.lon))
-      /*
-       weather.src=getIconById(data.weather[0].icon);
-        document.querySelector('#temp').innerHTML=current.temp+" "+unit;
-        document.querySelector('#like').innerHTML=current.feels_like+" "+unit;
-        document.querySelector('#min').innerHTML=current.temp_min+" "+unit;
-        document.querySelector('#max').innerHTML=current.temp_max+" "+unit;
-        document.querySelector('#wind').innerHTML=data.wind.speed+" &#13218;";
-        document.querySelector('#dir').innerHTML=data.wind.deg+"&deg;";
-        document.querySelector('#hum').innerHTML=current.humidity;
-        document.querySelector('#pre').innerHTML=current.pressure;
-       setUnitOfInnerHTML(unit);
-       changeDivInnerHTML(description,data.weather[0].description);
-       changeDivInnerHTML(date,`${getCurrentMonthName()}, ${getCurrentDay()}`);
-       changeInenerHTMLContentById(`${data.name},${data.sys.country}`,'loc');       
-       changeInenerHTMLContentById(data.visibility+" &#13214;",'vis')*/
-       setTimeout(intilizeMap,1000,coord);
-
+    
     }
     }catch(error){
         showToastWithTitleAndMessageWithDelay('Error',error,3000);
