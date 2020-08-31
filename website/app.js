@@ -283,7 +283,6 @@ const visisablity = select('#vis');
 */
 
 
-
 /**
 * @function  setTheme
 * @description change the current theme with provided theme name .
@@ -292,7 +291,6 @@ const visisablity = select('#vis');
 setTheme = (theme)=>{
     let x= document.getElementById('bulb');
     if(theme==='light'){
-    
         x.classList.remove('fas');
         x.classList.add('far');
         x.title="light on";
@@ -301,13 +299,17 @@ setTheme = (theme)=>{
         x.classList.add('fas');
         x.title="light off";
     }
-    
     localStorage.setItem('theme',theme);
     document.documentElement.className=theme;
 }
 
 
-
+/**
+* @function  allTemperatures
+* @description convert object data into string to be printed  .
+* @param {object}  obj we want to convert into string to be printed.
+* @param {string}  unit to be be added at the end of the object.
+*/
 allTemperatures =(obj,unit)=>{ 
     return `Day:${obj.day+unit}\n 
     Evening:${obj.eve+unit} Morning:${obj.morn+unit} Night:${obj.night+unit} Max:${obj.max+unit} Min:${obj.min+unit}`
@@ -321,7 +323,6 @@ allTemperatures =(obj,unit)=>{
 * @returns {object} object to represent the clear version of the resposne 
 */
 extractObjectDataFromResponseData = (item) =>{
-    console.log("in method",item);
     
    return {dateTime:item.dt, 
           sunRise:item.sunrise,
@@ -331,6 +332,39 @@ extractObjectDataFromResponseData = (item) =>{
           allData: function (unit) { return [`${getDateFromSeconds(this.dateTime)}` , `${allTemperatures(this.temperature,unit)}`]; } 
 }}
 
+
+extractObjectFromHourData = (item) => {
+
+        return {
+            hour:item.dt,
+            cloud:item.clouds,
+            feels:item.feels_like,
+            humidity:item.humidity,
+            pressure:item.pressure,
+            temperature:item.temp,
+            visibility:item.visibility,
+            windSpeed: item.wind_speed,
+            windDegree: item.wind_deg,
+            main:item.weather[0].main,
+            sub:item.weather[0].description,   
+            icon:item.weather[0].icon,
+            allData: function (unit){return [ `${getTimeFromSeconds(this.hour)}`,
+             `${this.temperature} ${unit}`, 
+             `${this.feels} ${unit}`, 
+             `${this.humidity}`,
+             `${this.pressure}`,
+             `${this.visibility}`,
+             `${this.windSpeed}`,
+             `${this.windDegree}`,
+             `${this.main}`,
+             `${this.sub}`,
+             `${this.icon}` ]}
+        }
+
+
+
+
+}
 
 /**
 * @function  
@@ -343,9 +377,6 @@ createListItemFromObject = (object) =>{
 
     let dateTimeDiv =document.createElement("div");
     dateTimeDiv.textContent=object.dateTime;
-
-
- 
  }
 
 
@@ -387,7 +418,6 @@ checkApiKeyIsSuppliedInCode = ()=>{
         apiKey.value=apiKeyString;
     }
 }
-
 
 
 /**
@@ -443,7 +473,6 @@ createNavBar = () =>{
 * @description Generate dynamic navbar from json list of objects .
 */
 generateDynamicNavbar = ()=> {
-  
 
     if(navigation.children.length===0){
         createNavBar();
@@ -474,7 +503,7 @@ filLanguageSelect= (target) =>{
 
 /**
 * @function  start
-* @description call methods  .
+* @description call methods at the start run of the page 
 */
 start = () =>{
     RetrieveTheme();
@@ -508,7 +537,6 @@ changeDivInnerHTML = (ele,text)=>{ele.innerHTML=`${text}`;}
 getCountryFlageByCountryCodeAndStyle =( imageElement,code,style )=> {
     imageElement.src = `https://www.countryflags.io/${code}/${style}/64.png`;
 }
-
 
 
 /**
@@ -892,6 +920,55 @@ setUnitOfInnerHTML = (unit)=>{
 
 
 
+amOrPmFromString = (time) =>{
+
+    let period ='';
+    const hour = time.split(':')[0];
+    if(parseInt(hour)>=12)
+        period='PM'
+    else
+        period="AM"
+    return `${time} ${period}`
+}
+
+
+createNewSpanFromStyleContent = (style,content) => {
+
+    let span =  document.createElement('span');
+    span.classList.add('badge');
+    span.classList.add(style);
+    span.classList.add('badge-pill');
+    span.innerHTML= content;
+
+    return span;
+
+}
+
+createNewSpanFromStyleContentWithIcon = (style,content,clases) => {
+
+    let span =  document.createElement('span');
+    span.classList.add('badge');
+    span.classList.add(style);
+    span.classList.add('badge-pill');
+    span.innerHTML= content;
+
+    let i = document.createElement('i');
+    i.classList.add(clases[0]);
+    i.classList.add(clases[1]);
+    span.appendChild(i);
+    return span;
+
+}
+
+createWeatherImageFromIconId = (id) =>{
+ let x =  document.createElement('img');
+ x.classList.add('rounded');
+ x.src= getIconById(id);
+ 
+return x;
+}
+
+
 /**
  * End Helper Functions
  * Begin Main Functions
@@ -915,7 +992,7 @@ getWeatherDataFromOpenWeartherApiOneCall = async url => {
     try{
        console.log("one call api");
        const data = await response.json();
-      // console.log(data);
+        console.log(data);
         let unit = getDegreeUnitFromUnit();
         weather.src=getIconById(data.current.weather[0].icon);
         document.querySelector('#temp').innerHTML=data.current.temp+" "+unit;
@@ -929,38 +1006,56 @@ getWeatherDataFromOpenWeartherApiOneCall = async url => {
         changeInenerHTMLContentById(data.current.visibility+" &#13214;",'vis');
         changeInenerHTMLContentById(data.current.uvi,'uvi')
 
+
+        for(hour of data.hourly){
+           const res = extractObjectFromHourData(hour);
+           let li = document.createElement('li');
+
+           let time =createNewSpanFromStyleContent('badge-dark',amOrPmFromString(res.allData(unit)[0].slice(2,)));  
+           let temp =createNewSpanFromStyleContent('badge-secondary',"Temperature :"+res.temperature+" "+unit);
+           let feels = createNewSpanFromStyleContent('badge-secondary',"Feels Like :"+res.feels+" "+unit);
+           let pressure = createNewSpanFromStyleContentWithIcon('badge-secondary',"Pressure :"+res.pressure,['fas','fa-thermometer-full']);
+           let humidity = createNewSpanFromStyleContentWithIcon('badge-secondary',"Humidity :"+res.humidity,['fas','fa-tint']);
+           let windSpeed = createNewSpanFromStyleContent('badge-secondary',"Wind Speed :" +res.windSpeed+" &#13223;");
+           let windDegree = createNewSpanFromStyleContentWithIcon('badge-secondary',"Wind Directon :"+res.windDegree+"&deg;",['far','fa-compass']);
+           
+           let img = createWeatherImageFromIconId(res.icon);
+           
+
+
+           li.appendChild(time);
+           li.appendChild(temp);
+           li.appendChild(feels);
+           li.appendChild(pressure);
+           li.appendChild(humidity);
+           li.appendChild(windSpeed);
+           li.appendChild(windDegree);
+           li.appendChild(img);
+           li.appendChild(createNewSpanFromStyleContent('badge-dark',res.main+", "+res.sub ));
+
+           //li.appendChild(text);
+           li.classList.add('list-group-item');
+           li.classList.add('list-group-item-dark');
+           daily.appendChild(li);
+
+        }
+        /*
         for(day of data.daily){
             let res = extractObjectDataFromResponseData(day);
             let li = document.createElement('li');
-           
             let span =  document.createElement('span');
-          
             span.classList.add('badge');
             span.classList.add('badge-dark');
             span.classList.add('badge-pill');
-           
             span.innerHTML=res.allData(unit)[0];
-
-
             li.appendChild(span);
-
-           let text = document.createElement('span');
-           text.innerHTML=res.allData(unit)[1];
-       
-           li.appendChild(text);
-            
-
+            let text = document.createElement('span');
+            text.innerHTML=res.allData(unit)[1];
+            li.appendChild(text);
             li.classList.add('list-group-item');
             li.classList.add('list-group-item-dark');
-
-           
             daily.appendChild(li);
-
-
-            
-            
-            
-        }
+        }*/
 
         setUnitOfInnerHTML(unit);
         changeDivInnerHTML(description,data.current.weather[0].description);
@@ -970,7 +1065,7 @@ getWeatherDataFromOpenWeartherApiOneCall = async url => {
         showToastWithTitleAndMessageWithDelay('Error',error,3000);
     }
 }
-
+getTimeFromSeconds
 
 
  /**
