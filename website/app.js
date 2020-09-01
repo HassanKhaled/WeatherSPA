@@ -65,6 +65,12 @@ const languages = [{value:'&lang=ar',text:'Arabic'}
                    {value:'&lang=zh_tw',text:'Chinese Traditional'},
                    {value:'&lang=zu',text:'Zulu'}]
 
+const days = [ {value:1 , text:'1 Day'},
+               {value:2 , text:'2 Days'},
+               {value:3 , text:'3 Days'},
+               {value:4 , text:'4 Days'},
+               {value:5 , text:'5 Days'}]
+
 /** @constant
     @type {array}
     @global
@@ -87,6 +93,14 @@ const baseApiUrl = 'https://api.openweathermap.org/data/2.5/weather';
     @description Hold reference to open weather one call url.
 */
 const baseOneCallUrl = 'https://api.openweathermap.org/data/2.5/onecall';
+
+
+/** @constant
+    @type {string}
+    @global
+    @description Hold reference to open weather one call url time machine .
+*/
+const baseOneCallTimeMachineUrl = 'https://api.openweathermap.org/data/2.5/onecall/timemachine';
 
 
 /** @type {object}
@@ -123,6 +137,13 @@ const  navigation=document.querySelector('#collapsibleNavbar');
     @description Hold reference to language select element.
 */
 const  languageSelect=select("#lang");
+
+/** @constant
+    @type {object}
+    @global
+    @description Hold reference to number of days ago select element.
+*/
+const  agoSelect=select("#ago");
 
 /** @constant
     @type {object}
@@ -481,17 +502,17 @@ generateDynamicNavbar = ()=> {
 
 
 /**
-* @function  filLanguageSelect
-* @param {object}  data to be stored 
-* @description check the type of the object.
-* @returns return the type of the object
+* @function  fillSelect
+* @param {object}  target select element to append options to 
+* @param {array}  list options to be added to the select element
+* @description  populate the target select element with option from list.
 */
-filLanguageSelect= (target) =>{
+fillSelect= (target, list) =>{
 
-    for(lang of languages){
+    for(item of list){
         let x = document.createElement('option');
-        x.setAttribute('value',lang.value);
-        x.innerHTML=lang.text;
+        x.setAttribute('value',item.value);
+        x.innerHTML=item.text;
         target.appendChild(x);
     }
 
@@ -506,8 +527,9 @@ start = () =>{
     RetrieveTheme();
     generateDynamicNavbar();
     setActiveClassForNavBarFromUrl();
-    filLanguageSelect(languageSelect);
+    fillSelect(languageSelect,languages);
     checkApiKeyIsSuppliedInCode();
+    fillSelect(agoSelect,days);
 
 }
 
@@ -646,7 +668,7 @@ fullCityUrl = city =>{return`${baseApiUrl}?q=${city}&appid=${text(apiKey)}`;}
 * @param {string} lon
 * @returns {string} Complete url to the open weather map api with latitude and longitude 
 */
-fullLatLonUrl = (lat, lon) =>{return`${baseApiUrl}?lat=${lat}&lon=${lon}&exclude=minutely,hourly&appid=${text(apiKey)}`;}
+fullLatLonUrl = (lat, lon) =>{return`${baseApiUrl}?lat=${lat}&lon=${lon}&appid=${text(apiKey)}`;}
 
 
 /**
@@ -656,7 +678,35 @@ fullLatLonUrl = (lat, lon) =>{return`${baseApiUrl}?lat=${lat}&lon=${lon}&exclude
 * @param {string} lon
 * @returns {string} Complete url to the open weather map api with latitude and longitude 
 */
-fullOneCallApiUrl = (lat, lon) =>{return`${baseOneCallUrl}?lat=${lat}&lon=${lon}&exclude=&appid=${text(apiKey)}`;}
+fullOneCallApiUrl = (lat, lon) =>{return`${baseOneCallUrl}?lat=${lat}&lon=${lon}&appid=${text(apiKey)}`;}
+
+
+
+/**
+* @function  getTimeOfPreviousDays
+* @description Return the date of previous days specicied by day
+* @param {number} day is the number of days we want to go back to 
+* @returns {number} the number of 
+*/
+getTimeOfPreviousDays = (day)=> {
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",day);
+    let x = new Date();
+    console.log(x.getTime());
+    x.setDate(x.getDate()- parseInt(day));
+    console.log(x.getTime());
+    return( Math.round( x.getTime()/1000));
+}
+
+
+/**
+* @function  fullOneCallApiTimeMachineUrl
+* @description Return a complete url for open weather map api for time machine api endpoint
+* @param {string} lat latitude 
+* @param {string} lon longitude 
+* @param {string} ago number of day to go back to in the pask 
+* @returns {string} Complete url to the open weather map api with latitude and longitude and time in the past (5 days max)
+*/
+fullOneCallApiTimeMachineUrl = (lat, lon, ago) =>{return`${baseOneCallTimeMachineUrl}?lat=${lat}&lon=${lon}&dt=${getTimeOfPreviousDays(ago)}&appid=${text(apiKey)}`;}
 
 
 /**
@@ -1000,7 +1050,7 @@ extractObjectFromMinuteData =(item)=>{
 * @returns {object} Consisted of three value date, temperature and finally feeling of the user
 */
 getWeatherDataFromOpenWeartherApiOneCall = async url => {
- 
+  
     let completeUrl = url+unitSelect.value+languageSelect.value;
   
     const response = await fetch(completeUrl);
@@ -1020,7 +1070,7 @@ getWeatherDataFromOpenWeartherApiOneCall = async url => {
         document.querySelector('#max').innerHTML=data.current.clouds+" &percnt;" ;
         changeInenerHTMLContentById(data.current.visibility+" &#13214;",'vis');
         changeInenerHTMLContentById(data.current.uvi,'uvi');
-        for(minute of data.minutely){
+      /*  for(minute of data.minutely){
             let res = extractObjectFromMinuteData(minute);
             console.log(res);
             let li = createListItem();
@@ -1031,7 +1081,7 @@ getWeatherDataFromOpenWeartherApiOneCall = async url => {
             li.appendChild(min);
             li.appendChild(rain);
             dailyList.appendChild(li);
-        }
+        }*/
         /*
         for(hour of data.hourly){
            const res = extractObjectFromHourData(hour);
@@ -1120,7 +1170,10 @@ getWeatherDataFromOpenWeartherApi = async url => {
        
        let current = data.main;
        coord=data.coord;
-       getWeatherDataFromOpenWeartherApiOneCall(fullOneCallApiUrl(coord.lat,coord.lon))
+
+       //fullOneCallApiTimeMachineUrl
+       //getWeatherDataFromOpenWeartherApiOneCall(fullOneCallApiUrl(coord.lat,coord.lon))
+       getWeatherDataFromOpenWeartherApiOneCall(fullOneCallApiTimeMachineUrl(coord.lat,coord.lon,agoSelect.value));
     
     }
     }catch(error){
