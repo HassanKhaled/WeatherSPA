@@ -65,6 +65,13 @@ const languages = [{value:'&lang=ar',text:'Arabic'}
                    {value:'&lang=zh_tw',text:'Chinese Traditional'},
                    {value:'&lang=zu',text:'Zulu'}]
 
+
+
+/** @constant
+    @type {array}
+    @global
+    @description Hold days' limit on the time machine api call.
+*/
 const days = [ {value:1 , text:'1 Day'},
                {value:2 , text:'2 Days'},
                {value:3 , text:'3 Days'},
@@ -350,11 +357,30 @@ extractObjectDataFromResponseData = (item) =>{
           sunSet:item.sunset,
           temperature:item.temp,
         
-          allData: function (unit) { return [`${getDateFromSeconds(this.dateTime)}` , `${allTemperatures(this.temperature,unit)}`]; } 
+          allData: function (unit) { return [`${getDateFromSeconds(this.dateTime)}` , `${allTemperatures(this.temperature,unit.value)}`]; } 
 }}
 
 
+/**
+* @function  extractObjectFromMinuteData
+* @description extract data from the api response and represent it in a clearer manner.
+* @param {object}  item object from the api reponse.
+* @returns {object} object to represent the clear version of the resposne 
+*/
+extractObjectFromMinuteData =(item)=>{
+    return { min:item.dt,
+            rain:item.precipitation,
+            allData: function (){return [`${getTimeFromSeconds( this.min)}`,`${this.rain}`]}}
 
+}
+
+
+/**
+* @function  extractObjectFromHourData
+* @description extract data from the api response and represent it in a clearer manner.
+* @param {object}  item object from the api reponse.
+* @returns {object} object to represent the clear version of the resposne 
+*/
 extractObjectFromHourData = (item) => {
         return {
             hour:item.dt,
@@ -468,7 +494,6 @@ getlastUrlFromCompleteUrl = (url)=>{
 * @description Create nav bar dynmically .
 */
 createNavBar = () =>{
-    
     const unorderedList = document.createElement('ul');
     unorderedList.classList.add('navbar-nav');
     for(link of links){
@@ -482,7 +507,6 @@ createNavBar = () =>{
         unorderedList.appendChild(listItem);
     }
     navigation.appendChild(unorderedList);
-
 }
 
 
@@ -530,7 +554,6 @@ start = () =>{
     fillSelect(languageSelect,languages);
     checkApiKeyIsSuppliedInCode();
     fillSelect(agoSelect,days);
-
 }
 
 
@@ -957,6 +980,12 @@ showToastWithTitleAndMessageWithDelay = (title, message, delay)=>{
 
 }
   
+
+/**
+* @function  setUnitOfInnerHTML
+* @param {string}  unit  to be shown  
+* @description add temperature measurement unit to the end of the holder class element.
+*/
 setUnitOfInnerHTML = (unit)=>{
 
     const x = document.querySelectorAll('.holder');
@@ -967,7 +996,12 @@ setUnitOfInnerHTML = (unit)=>{
 }
 
 
-
+/**
+* @function  amOrPmFromString
+* @param {date}  time  date to add period and return as string
+* @description shows the toast with set of paramters.
+* @returns time with period 
+*/
 amOrPmFromString = (time) =>{
 
     let period ='';
@@ -980,18 +1014,31 @@ amOrPmFromString = (time) =>{
 }
 
 
+/**
+* @function  createNewSpanFromStyleContent
+* @param {string}  style  of the span
+* @param {string}  content  content of the span
+* @description create new span from style and content.
+* @returns {object} new  span 
+*/
 createNewSpanFromStyleContent = (style,content) => {
-
     let span =  document.createElement('span');
     span.classList.add('badge');
     span.classList.add(style);
     span.classList.add('badge-pill');
     span.innerHTML= content;
-
     return span;
-
 }
 
+
+/**
+* @function  createNewSpanFromStyleContentWithIcon
+* @param {string}  style  of the span
+* @param {string}  content  content of the span
+* @param {array}  clases  font awesome icons as string in array 
+* @description create new span from style, content and array.
+* @returns {object} new  span 
+*/
 createNewSpanFromStyleContentWithIcon = (style,content,clases) => {
 
     let span =  document.createElement('span');
@@ -1008,6 +1055,13 @@ createNewSpanFromStyleContentWithIcon = (style,content,clases) => {
 
 }
 
+
+/**
+* @function  createWeatherImageFromIconId
+* @param {string}  id  from the api that is used for weather icon 
+* @description get it and return complete url of the image.
+* @returns {string} image url 
+*/
 createWeatherImageFromIconId = (id) =>{
  let x =  document.createElement('img');
  x.classList.add('rounded');
@@ -1016,17 +1070,112 @@ createWeatherImageFromIconId = (id) =>{
 return x;
 }
 
+
+/**
+* @function  createListItem 
+* @description return new list item element.
+* @returns {obect} new list item 
+*/
 createListItem = () =>{
     return document.createElement('li');
 }
 
 
+/**
+* @function  createListItem 
+* @description return new list item element.
+* @param {object} li list item to append ele to 
+* @param {object} ele the element to be appened to the li 
+*/
 appendChildToListItem = (li,ele)=>{
 
     li.appendChild(ele);
 } 
 
 
+
+/**
+* @function  appendMintlyDataTo
+* @description return new list item element.
+* @param {object} ele to append data to 
+* @param {array} data the element to be appened to ele 
+*/
+appendMintlyDataTo = (ele, data)=>{
+    for(minute of data){
+        let res = extractObjectFromMinuteData(minute);
+        let li = createListItem();
+        li.classList.add('list-group-item');
+        li.classList.add('list-group-item-dark');
+        let min = createNewSpanFromStyleContent('badge-dark',amOrPmFromString(res.allData()[0].slice(2,)));
+        let rain = createNewSpanFromStyleContentWithIcon('badge-dark',res.allData()[1]+" &#13212; ",['fas','fa-cloud-rain']);
+        li.appendChild(min);
+        li.appendChild(rain);
+        ele.appendChild(li);
+    }
+    
+} 
+
+
+/**
+* @function  appendHourlyDataTo
+* @description return new list item element.
+* @param {object} ele to append data to 
+* @param {array} data the element to be appened to ele 
+*/
+appendHourlyDataTo = (ele, data)=>{
+    for(hour of data){
+        const res = extractObjectFromHourData(hour);
+        let li = document.createElement('li');
+        let time =createNewSpanFromStyleContent('badge-dark',amOrPmFromString(res.allData(unit)[0].slice(2,)));  
+        let temp =createNewSpanFromStyleContent('badge-secondary',"Temperature :"+res.temperature+" "+unit);
+        let feels = createNewSpanFromStyleContent('badge-secondary',"Feels Like :"+res.feels+" "+unit);
+        let pressure = createNewSpanFromStyleContentWithIcon('badge-secondary',"Pressure :"+res.pressure,['fas','fa-thermometer-full']);
+        let humidity = createNewSpanFromStyleContentWithIcon('badge-secondary',"Humidity :"+res.humidity,['fas','fa-tint']);
+        let windSpeed = createNewSpanFromStyleContent('badge-secondary',"Wind Speed :" +res.windSpeed+" &#13223;");
+        let windDegree = createNewSpanFromStyleContentWithIcon('badge-secondary',"Wind Directon :"+res.windDegree+"&deg;",['far','fa-compass']);
+        let img = createWeatherImageFromIconId(res.icon);
+        li.appendChild(time);
+        li.appendChild(temp);
+        li.appendChild(feels);
+        li.appendChild(pressure);
+        li.appendChild(humidity);
+        li.appendChild(windSpeed);
+        li.appendChild(windDegree);
+        li.appendChild(img);
+        li.appendChild(createNewSpanFromStyleContent('badge-dark',res.main+", "+res.sub ));
+        //li.appendChild(text);
+        li.classList.add('list-group-item');
+        li.classList.add('list-group-item-dark');
+        ele.appendChild(li);
+
+     }
+} 
+
+
+/**
+* @function  appendDailyDataTo
+* @description return new list item element.
+* @param {object} ele to append data to 
+* @param {array} data the element to be appened to ele 
+*/
+appendDailyDataTo = (ele, data)=>{
+    for(day of data){
+        let res = extractObjectDataFromResponseData(day);
+            let li = document.createElement('li');
+            let span =  document.createElement('span');
+            span.classList.add('badge');
+            span.classList.add('badge-dark');
+            span.classList.add('badge-pill');
+            span.innerHTML=res.allData(unit.value)[0];
+            li.appendChild(span);
+            let text = document.createElement('span');
+            text.innerHTML=res.allData(unit)[1];
+            li.appendChild(text);
+            li.classList.add('list-group-item');
+            li.classList.add('list-group-item-dark');
+            dailyList.appendChild(li);
+    }
+} 
 
 
 /**
@@ -1035,12 +1184,6 @@ appendChildToListItem = (li,ele)=>{
  *
 */
 
-extractObjectFromMinuteData =(item)=>{
-    return { min:item.dt,
-            rain:item.precipitation,
-            allData: function (){return [`${getTimeFromSeconds( this.min)}`,`${this.rain}`]}}
-
-}
 
  /**
 * @async
@@ -1055,8 +1198,8 @@ getWeatherDataFromOpenWeartherApiOneCall = async url => {
   
     const response = await fetch(completeUrl);
     try{
-       console.log("one call api");
-       const data = await response.json();
+        console.log("one call api");
+        const data = await response.json();
         console.log(data);
         let unit = getDegreeUnitFromUnit();
         weather.src=getIconById(data.current.weather[0].icon);
@@ -1070,69 +1213,14 @@ getWeatherDataFromOpenWeartherApiOneCall = async url => {
         document.querySelector('#max').innerHTML=data.current.clouds+" &percnt;" ;
         changeInenerHTMLContentById(data.current.visibility+" &#13214;",'vis');
         changeInenerHTMLContentById(data.current.uvi,'uvi');
-      /*  for(minute of data.minutely){
-            let res = extractObjectFromMinuteData(minute);
-            console.log(res);
-            let li = createListItem();
-            li.classList.add('list-group-item');
-            li.classList.add('list-group-item-dark');
-            let min = createNewSpanFromStyleContent('badge-dark',amOrPmFromString(res.allData()[0].slice(2,)));
-            let rain = createNewSpanFromStyleContentWithIcon('badge-dark',res.allData()[1]+" &#13212; ",['fas','fa-cloud-rain']);
-            li.appendChild(min);
-            li.appendChild(rain);
-            dailyList.appendChild(li);
-        }*/
-        /*
-        for(hour of data.hourly){
-           const res = extractObjectFromHourData(hour);
-           let li = document.createElement('li');
 
-           let time =createNewSpanFromStyleContent('badge-dark',amOrPmFromString(res.allData(unit)[0].slice(2,)));  
-           let temp =createNewSpanFromStyleContent('badge-secondary',"Temperature :"+res.temperature+" "+unit);
-           let feels = createNewSpanFromStyleContent('badge-secondary',"Feels Like :"+res.feels+" "+unit);
-           let pressure = createNewSpanFromStyleContentWithIcon('badge-secondary',"Pressure :"+res.pressure,['fas','fa-thermometer-full']);
-           let humidity = createNewSpanFromStyleContentWithIcon('badge-secondary',"Humidity :"+res.humidity,['fas','fa-tint']);
-           let windSpeed = createNewSpanFromStyleContent('badge-secondary',"Wind Speed :" +res.windSpeed+" &#13223;");
-           let windDegree = createNewSpanFromStyleContentWithIcon('badge-secondary',"Wind Directon :"+res.windDegree+"&deg;",['far','fa-compass']);
-           
-           let img = createWeatherImageFromIconId(res.icon);
-           
-
-           li.appendChild(time);
-           li.appendChild(temp);
-           li.appendChild(feels);
-           li.appendChild(pressure);
-           li.appendChild(humidity);
-           li.appendChild(windSpeed);
-           li.appendChild(windDegree);
-           li.appendChild(img);
-           li.appendChild(createNewSpanFromStyleContent('badge-dark',res.main+", "+res.sub ));
-
-           //li.appendChild(text);
-           li.classList.add('list-group-item');
-           li.classList.add('list-group-item-dark');
-           daily.appendChild(li);
-
-        }*/
+        //appendMintlyDataTo(dailyList,data.minutely);
+        //appendHourlyDataTo(dailyList,data.hourly);
 
 
-        /*
-        for(day of data.daily){
-            let res = extractObjectDataFromResponseData(day);
-            let li = document.createElement('li');
-            let span =  document.createElement('span');
-            span.classList.add('badge');
-            span.classList.add('badge-dark');
-            span.classList.add('badge-pill');
-            span.innerHTML=res.allData(unit)[0];
-            li.appendChild(span);
-            let text = document.createElement('span');
-            text.innerHTML=res.allData(unit)[1];
-            li.appendChild(text);
-            li.classList.add('list-group-item');
-            li.classList.add('list-group-item-dark');
-            daily.appendChild(li);
-        }*/
+        //appendDailyDataTo(dailyList,data.daily);
+
+    
 
         setUnitOfInnerHTML(unit);
         changeDivInnerHTML(description,data.current.weather[0].description);
@@ -1171,9 +1259,8 @@ getWeatherDataFromOpenWeartherApi = async url => {
        let current = data.main;
        coord=data.coord;
 
-       //fullOneCallApiTimeMachineUrl
-       //getWeatherDataFromOpenWeartherApiOneCall(fullOneCallApiUrl(coord.lat,coord.lon))
-       getWeatherDataFromOpenWeartherApiOneCall(fullOneCallApiTimeMachineUrl(coord.lat,coord.lon,agoSelect.value));
+       getWeatherDataFromOpenWeartherApiOneCall(fullOneCallApiUrl(coord.lat,coord.lon))
+       //getWeatherDataFromOpenWeartherApiOneCall(fullOneCallApiTimeMachineUrl(coord.lat,coord.lon,agoSelect.value));
     
     }
     }catch(error){
