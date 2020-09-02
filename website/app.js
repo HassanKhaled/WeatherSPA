@@ -453,7 +453,6 @@ extractObjectFromHourData = (item) => {
 */
 createListItemFromObject = (object) =>{
     let listItem =document.createElement("li");
-
     let dateTimeDiv =document.createElement("div");
     dateTimeDiv.textContent=object.dateTime;
  }
@@ -465,13 +464,11 @@ createListItemFromObject = (object) =>{
 * @description toggle between two themes .
 */
 toggleTheme = () =>{
-
     if(localStorage.getItem('theme')==='light')
         setTheme('dark');
     else 
         setTheme('light');
 }
-
 
 /**
 * @function  RetrieveTheme
@@ -481,7 +478,6 @@ RetrieveTheme = () =>{
     const theme = localStorage.getItem('theme')
     setTheme(theme);
 }
-
 
 /**
 * @function  checkApiKeyIsSuppliedInCode
@@ -497,7 +493,6 @@ checkApiKeyIsSuppliedInCode = ()=>{
         apiKey.value=apiKeyString;
     }
 }
-
 
 /**
 * @function  setActiveClassForNavBarFromUrl
@@ -578,7 +573,6 @@ fillSelect= (target, list) =>{
     }
 
 }
-
 
 
 /**
@@ -703,7 +697,6 @@ let x =document.getElementById('mapdiv').children.length;
 }
 
 
-
 /**
 * @function  select
 * @description Return object selected by querySelector specified by the query 
@@ -737,9 +730,7 @@ getDateFromSeconds = (seconds)=> {
 getTimeFromSeconds = (seconds)=> { 
     let x = new Date(seconds* 1000);
     let t = x.toUTCString().slice(15,25);
-
     return `${t}`}
-
 
 /**
 * @function  fullZipUrl
@@ -786,7 +777,6 @@ fullOneCallApiUrl = (lat, lon) =>{return`${baseOneCallUrl}?lat=${lat}&lon=${lon}
 * @returns {number} the number of 
 */
 getTimeOfPreviousDays = (day)=> {
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",day);
     let x = new Date();
     console.log(x.getTime());
     x.setDate(x.getDate()- parseInt(day));
@@ -984,7 +974,6 @@ getAmOrPm = (hour) =>{
 * @description add zero to start of any single digital number 
 */
 checkDigits = (digit)=>{
-
     if(digit<10)
         return '0'+digit;
     else
@@ -1082,19 +1071,16 @@ createNewSpanFromStyleContent = (style,content) => {
 * @returns {object} new  span 
 */
 createNewSpanFromStyleContentWithIcon = (style,content,clases) => {
-
     let span =  document.createElement('span');
     span.classList.add('badge');
     span.classList.add(style);
     span.classList.add('badge-pill');
     span.innerHTML= content;
-
     let i = document.createElement('i');
     i.classList.add(clases[0]);
     i.classList.add(clases[1]);
     span.appendChild(i);
     return span;
-
 }
 
 
@@ -1248,31 +1234,13 @@ appendUnitandIntilizeMap = (unit , coord) =>{
     setTimeout(intilizeMap,1000,coord);
 }
 
-/*
-showById = (id)=>{
-  let x = document.getElementById(id);
-  x.style.display='block';
-}
-
-hideById = (id)=>{
-    let x = document.getElementById(id);
-    x.style.display='none';
-  }
 
 
-clearSelectById =()=>{
-    
-    for(let i =0;i<dailyList.children.length ;i++){
-        console.log(i);
-        dailyList.removeChild(dailyList.children[i]);
-        }
-
-}*/
-
-
-
-
-
+/**
+* @function  openCollapseWithIndex
+* @description open collapse denpending on the index.
+* @param {number} index of the collapge to be shown
+*/
 openCollapseWithIndex =(index)=>{
     let x =document.getElementsByClassName('collapse');
     for(item of  x){
@@ -1287,7 +1255,6 @@ openCollapseWithIndex =(index)=>{
  *
 */
 
-
  /**
 * @async
 * @function  getWeatherDataFromOpenWeartherApi
@@ -1298,16 +1265,12 @@ openCollapseWithIndex =(index)=>{
 getWeatherDataFromOpenWeartherApiOneCall = async url => {
   
     let completeUrl = url+unitSelect.value+languageSelect.value;
-  
     const response = await fetch(completeUrl);
     try{
 
         console.log("one call api");
         const data = await response.json();
         document.getElementById('dateTime').innerText=getDateFromSeconds(data.current.dt);
-        
-
-
 
         if(agoSelect.value!==''){
             requestSelect.value=1;
@@ -1339,7 +1302,6 @@ getWeatherDataFromOpenWeartherApiOneCall = async url => {
         showToastWithTitleAndMessageWithDelay('Error',error,3000);
     }
 }
-
 
 
  /**
@@ -1379,9 +1341,6 @@ getWeatherDataFromOpenWeartherApi = async url => {
         showToastWithTitleAndMessageWithDelay('Error',error,3000);
     }
 }
-
-
-
 
 
 /**
@@ -1479,8 +1438,6 @@ document.getElementById('setting').addEventListener('click', (e)=>{
     e.preventDefault();
     
 })
-
-
 
 
 requestSelect.addEventListener('change',(e)=>{
