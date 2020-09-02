@@ -86,8 +86,7 @@ const days = [ {value:1 , text:'1 Day'},
 const requests = [ {value:1 , text:'Current'},
                {value:2 , text:'Daily'},
                {value:3 , text:'Hourly'},
-               {value:4 , text:'Mintly'},
-               {value:5 , text:'Time Machine'}]
+               {value:4 , text:'Mintly'}]
 
 /** @constant
     @type {array}
@@ -1306,9 +1305,15 @@ getWeatherDataFromOpenWeartherApiOneCall = async url => {
         console.log("one call api");
         const data = await response.json();
         document.getElementById('dateTime').innerText=getDateFromSeconds(data.current.dt);
+        
+
+
+
+        if(agoSelect.value!==''){
+            requestSelect.value=1;
+        }
         let value = requestSelect.value;
-      
-       let index = parseInt(value)-1;
+        let index = parseInt(value)-1;
     
         console.log(requestSelect.value);
         if(value==='1'){
@@ -1361,9 +1366,13 @@ getWeatherDataFromOpenWeartherApi = async url => {
        
        let current = data.main;
        coord=data.coord;
+    
+       if(agoSelect.value!==''){
+        getWeatherDataFromOpenWeartherApiOneCall(fullOneCallApiTimeMachineUrl(coord.lat,coord.lon,agoSelect.value));
+       }else{
+        getWeatherDataFromOpenWeartherApiOneCall(fullOneCallApiUrl(coord.lat,coord.lon));
 
-       getWeatherDataFromOpenWeartherApiOneCall(fullOneCallApiUrl(coord.lat,coord.lon))
-       //getWeatherDataFromOpenWeartherApiOneCall(fullOneCallApiTimeMachineUrl(coord.lat,coord.lon,agoSelect.value));
+       }
     
     }
     }catch(error){
