@@ -81,6 +81,17 @@ const days = [ {value:1 , text:'1 Day'},
 /** @constant
     @type {array}
     @global
+    @description Hold days' limit on the time machine api call.
+*/
+const requests = [ {value:1 , text:'Current'},
+               {value:2 , text:'Daily'},
+               {value:3 , text:'Hourly'},
+               {value:4 , text:'Mintly'},
+               {value:5 , text:'Time Machine'}]
+
+/** @constant
+    @type {array}
+    @global
     @description Hold links' names.
 */
 const links = [{href:"index.html",text:"Current"}] 
@@ -145,6 +156,15 @@ const  navigation=document.querySelector('#collapsibleNavbar');
 */
 const  languageSelect=select("#lang");
 
+
+
+/** @constant
+    @type {object}
+    @global
+    @description Hold reference to request select element.
+*/
+const  requestSelect=select("#request");
+
 /** @constant
     @type {object}
     @global
@@ -197,9 +217,25 @@ const getButton = select('#get');
 /** @constant
     @type {object}
     @global
-    @description Hold reference to get button html element.
+    @description Hold reference to  daily select.
 */
 const dailyList = select('#daily');
+
+
+
+/** @constant
+    @type {object}
+    @global
+    @description Hold reference to hourly select.
+*/
+const hourlyList = select('#hourly');
+
+/** @constant
+    @type {object}
+    @global
+    @description Hold reference to miutly select.
+*/
+const miutlyList = select('#miutly');
 
 
 /** @constant
@@ -489,10 +525,12 @@ getlastUrlFromCompleteUrl = (url)=>{
     return  url.split('/')[url.split('/').length-1]
 }
 
+
 /**
 * @function  createNavBar
 * @description Create nav bar dynmically .
 */
+/*
 createNavBar = () =>{
     const unorderedList = document.createElement('ul');
     unorderedList.classList.add('navbar-nav');
@@ -507,13 +545,13 @@ createNavBar = () =>{
         unorderedList.appendChild(listItem);
     }
     navigation.appendChild(unorderedList);
-}
+}*/
 
 
 /**
 * @function  generateDynamicNavbar
 * @description Generate dynamic navbar from json list of objects .
-*/
+*//*
 generateDynamicNavbar = ()=> {
 
     if(navigation.children.length===0){
@@ -523,7 +561,7 @@ generateDynamicNavbar = ()=> {
         createNavBar();
     }
 }
-
+*/
 
 /**
 * @function  fillSelect
@@ -543,17 +581,54 @@ fillSelect= (target, list) =>{
 }
 
 
+
+/**
+* @function  saveDataToLocalStorage
+* @param {object}  data to be stored 
+* @param {string}  key string key to access the data
+* @description Stores data to the local stroage after converting to string.
+*/
+saveDataToLocalStorage = (key,data)=>{
+    if(checkType(data)==='String')
+        localStorage.setItem(key,data);
+    else
+        localStorage.setItem(key,JSON.stringify(data));
+}
+
+
+/**
+* @function  getDataFromLocalStorage
+* @param {string}  key string key to access the data
+* @description retrieve the data from the local storage.
+* @returns  data from the local storage 
+*/
+getDataFromLocalStorage = (key)=>{
+    return JSON.parse(localStorage.getItem(key));
+   }
+
+
+/**
+* @function  removeDataFromLocalStorage
+* @param {string}  key string key to access the data
+* @description retrieve the data from the local storage.
+*/
+removeDataFromLocalStorage = (key)=>{ localStorage.removeItem(key);}
+
+
 /**
 * @function  start
 * @description call methods at the start run of the page 
 */
 start = () =>{
     RetrieveTheme();
-    generateDynamicNavbar();
+    //generateDynamicNavbar();
     setActiveClassForNavBarFromUrl();
     fillSelect(languageSelect,languages);
+    fillSelect(requestSelect,requests);
     checkApiKeyIsSuppliedInCode();
     fillSelect(agoSelect,days);
+    apiKey.value=getDataFromLocalStorage('api');
+    getButton.disabled =true;
 }
 
 
@@ -917,38 +992,6 @@ checkDigits = (digit)=>{
         return digit;
 }
 
-/**
-* @function  saveDataToLocalStorage
-* @param {object}  data to be stored 
-* @param {string}  key string key to access the data
-* @description Stores data to the local stroage after converting to string.
-*/
-saveDataToLocalStorage = (key,data)=>{
-    if(checkType(data)==='String')
-        localStorage.setItem(key,data);
-    else
-        localStorage.setItem(key,JSON.stringify(data));
-}
-
-
-/**
-* @function  getDataFromLocalStorage
-* @param {string}  key string key to access the data
-* @description retrieve the data from the local storage.
-* @returns  data from the local storage 
-*/
-getDataFromLocalStorage = (key)=>{
- return JSON.parse(localStorage.getItem(key));
-}
-
-
-/**
-* @function  removeDataFromLocalStorage
-* @param {string}  key string key to access the data
-* @description retrieve the data from the local storage.
-*/
-removeDataFromLocalStorage = (key)=>{ localStorage.removeItem(key);}
-
 
 /**
 * @function  checkType
@@ -1123,6 +1166,7 @@ appendMintlyDataTo = (ele, data)=>{
 * @param {array} data the element to be appened to ele 
 */
 appendHourlyDataTo = (ele, data)=>{
+
     for(hour of data){
         const res = extractObjectFromHourData(hour);
         let li = document.createElement('li');
@@ -1179,6 +1223,66 @@ appendDailyDataTo = (ele, data)=>{
 
 
 /**
+* @function  appendCurretData
+* @description show current weather condition on the page.
+* @param {array} data to be shown on the page 
+*/
+appendCurretData= (data)=>{
+    let unit = getDegreeUnitFromUnit();
+    weather.src=getIconById(data.current.weather[0].icon);
+    document.querySelector('#temp').innerHTML=data.current.temp+" "+unit;
+    document.querySelector('#like').innerHTML=data.current.feels_like+" "+unit;
+    document.querySelector('#wind').innerHTML=data.current.wind_speed+" &#13223;";
+    document.querySelector('#dir').innerHTML=data.current.wind_deg+"&deg;";
+    document.querySelector('#hum').innerHTML=data.current.humidity;
+    document.querySelector('#pre').innerHTML=data.current.pressure;
+    document.querySelector('#min').innerHTML=data.current.dew_point+" "+unit;
+    document.querySelector('#max').innerHTML=data.current.clouds+" &percnt;" ;
+    changeInenerHTMLContentById(data.current.visibility+" &#13214;",'vis');
+    changeInenerHTMLContentById(data.current.uvi,'uvi');
+    changeDivInnerHTML(description,data.current.weather[0].description);
+    appendUnitandIntilizeMap(unit , coord);
+} 
+
+appendUnitandIntilizeMap = (unit , coord) =>{
+    setUnitOfInnerHTML(unit);
+    setTimeout(intilizeMap,1000,coord);
+}
+
+/*
+showById = (id)=>{
+  let x = document.getElementById(id);
+  x.style.display='block';
+}
+
+hideById = (id)=>{
+    let x = document.getElementById(id);
+    x.style.display='none';
+  }
+
+
+clearSelectById =()=>{
+    
+    for(let i =0;i<dailyList.children.length ;i++){
+        console.log(i);
+        dailyList.removeChild(dailyList.children[i]);
+        }
+
+}*/
+
+
+
+
+
+openCollapseWithIndex =(index)=>{
+    let x =document.getElementsByClassName('collapse');
+    for(item of  x){
+        item.classList.remove('show');
+    }
+    x[index].classList.add('show');
+}
+
+/**
  * End Helper Functions
  * Begin Main Functions
  *
@@ -1198,33 +1302,32 @@ getWeatherDataFromOpenWeartherApiOneCall = async url => {
   
     const response = await fetch(completeUrl);
     try{
+
         console.log("one call api");
         const data = await response.json();
-        console.log(data);
-        let unit = getDegreeUnitFromUnit();
-        weather.src=getIconById(data.current.weather[0].icon);
-        document.querySelector('#temp').innerHTML=data.current.temp+" "+unit;
-        document.querySelector('#like').innerHTML=data.current.feels_like+" "+unit;
-        document.querySelector('#wind').innerHTML=data.current.wind_speed+" &#13223;";
-        document.querySelector('#dir').innerHTML=data.current.wind_deg+"&deg;";
-        document.querySelector('#hum').innerHTML=data.current.humidity;
-        document.querySelector('#pre').innerHTML=data.current.pressure;
-        document.querySelector('#min').innerHTML=data.current.dew_point+" "+unit;
-        document.querySelector('#max').innerHTML=data.current.clouds+" &percnt;" ;
-        changeInenerHTMLContentById(data.current.visibility+" &#13214;",'vis');
-        changeInenerHTMLContentById(data.current.uvi,'uvi');
-
-        //appendMintlyDataTo(dailyList,data.minutely);
-        //appendHourlyDataTo(dailyList,data.hourly);
-
-
-        //appendDailyDataTo(dailyList,data.daily);
-
+        document.getElementById('dateTime').innerText=getDateFromSeconds(data.current.dt);
+        let value = requestSelect.value;
+      
+       let index = parseInt(value)-1;
     
+        console.log(requestSelect.value);
+        if(value==='1'){
+            openCollapseWithIndex(index);
+            appendCurretData(data);
 
-        setUnitOfInnerHTML(unit);
-        changeDivInnerHTML(description,data.current.weather[0].description);
-        setTimeout(intilizeMap,1000,coord);
+        }else if (value==='2'){
+            openCollapseWithIndex(index);     
+            appendDailyDataTo(dailyList,data.daily);
+
+        }else if (value==='3'){
+            openCollapseWithIndex(index);
+            appendHourlyDataTo(hourlyList,data.hourly);
+
+        }else if (value==='4'){
+            openCollapseWithIndex(index);
+            appendMintlyDataTo(miutlyList,data.minutely);
+
+        }
         
     }catch(error){
         console.log(error);
@@ -1353,7 +1456,7 @@ deleteButton.addEventListener('click' , (e)=>{
 
 retrieveButton.addEventListener('click' , (e)=>{
     e.preventDefault();
-    apiKey.value= getDataFromLocalStorage('api')
+    apiKey.value= getDataFromLocalStorage('api');
     
 });
 
@@ -1367,3 +1470,14 @@ document.getElementById('setting').addEventListener('click', (e)=>{
     e.preventDefault();
     
 })
+
+
+
+
+requestSelect.addEventListener('change',(e)=>{
+
+if(e.target.value!==''){
+    getButton.disabled =false;
+}
+
+} )
