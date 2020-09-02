@@ -150,3 +150,35 @@ input[type=text]:focus {
 }
 
 
+.card{
+
+    border:solid 1px var(--color-4);
+}
+
+
+.card-header{
+    background: var(--color-2);
+    color: var(--color-4);
+}
+
+.card-link{
+
+    color:var(--color-5);
+}
+
+.card-link:active{
+    color:var(--color-6);
+}
+
+.card-link:hover{
+    color:var(--color-6);
+}
+
+.card-body{
+    color: var(--color-6);
+    background: var(--color-3);
+ 
+}
+
+
+
