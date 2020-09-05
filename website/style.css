@@ -178,7 +178,7 @@ input[type=text]:focus {
 }
 
 
-@keyframes test {
+@keyframes rotation2D {
 
     0%   { transform: rotate(0deg);}
     25%  { transform: rotate(90deg);}
@@ -187,7 +187,7 @@ input[type=text]:focus {
     100% { transform: rotate(360deg);}
 }
 
-@keyframes test1 {
+@keyframes scaleUp {
 
     0%   { transform:scale(0,0);}
     10%  { transform:scale(0.1,0.1);}
@@ -202,7 +202,7 @@ input[type=text]:focus {
     100% {transform:scale(1.1,1.1); }
 }
 
-@keyframes test2 {
+@keyframes shake {
 
     0%   { transform:translate(0px, 0px);}
     25%  { transform:translate(1px, 0px);}
@@ -237,7 +237,7 @@ input[type=text]:focus {
 
 
 .card-header:hover{
-    animation: test2;
+    animation: shake;
     animation-duration: 0.5s;
     animation-iteration-count: infinite;
     animation-direction: normal;
@@ -249,20 +249,9 @@ input[type=text]:focus {
     transform:scale(2, 2);
     transform-box: fill-box;
     transform-origin: center;
-    animation: test;
+    animation: rotation2D;
     animation-duration: 2s;
     animation-iteration-count: infinite;
     animation-direction: normal;
     animation-timing-function: linear;
-}
-
-
-.logo{
-
-    animation: test;
-    animation-duration: 2s;
-    animation-iteration-count: infinite;
-    animation-direction: normal;
-    animation-timing-function: linear;
-
 }
