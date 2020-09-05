@@ -181,4 +181,19 @@ input[type=text]:focus {
 }
 
 
+@keyframes test {
 
+    0%   {background-color: red;}
+    25%  {background-color: yellow;}
+    50%  {background-color: blue;}
+    100% {background-color: green;}
+}
+
+.logo{
+
+    animation: test;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    animation-direction: reverse;
+
+}

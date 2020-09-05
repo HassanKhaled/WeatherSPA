@@ -1368,7 +1368,6 @@ getWeatherDataFromOpenWeartherApi = async url => {
 success = (position) => {
 latInput.value = position.coords.latitude;
 lonInput.value= position.coords.longitude;
- getWeatherDataFromOpenWeartherApi(fullLatLonUrl(text(latInput),text(lonInput)));
   }
 
 
