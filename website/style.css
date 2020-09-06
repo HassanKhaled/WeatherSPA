@@ -26,7 +26,20 @@
     --color-10:rgba(99,99,99,1);
 }
 
+@keyframes show {
+    0%   {  opacity:0;}
+    25%  {  opacity:0.25;}
+    50%  {  opacity:0.5;}
+    75%  {  opacity:0.75;}
+    100% {  opacity:1;}
+}
 
+.fade{
+    animation-name: show;
+    animation-duration: 3s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
 
 
 .form-control::-webkit-input-placeholder { /* Edge */
@@ -48,6 +61,7 @@
 body{
     font-family: Cairo;
     background: var(--color-1);
+
 }
 
 select{
@@ -121,7 +135,6 @@ input[type=text]:focus {
 }
 
 #content{
-    
     border-radius: 5px;
     background-color: var(--color-3);
     color: var(--color-6);
@@ -242,11 +255,39 @@ input[type=text]:focus {
     animation-iteration-count: infinite;
     animation-direction: normal;
     animation-timing-function: linear;
+}
+
+
+@keyframes growY {
+    0%   { transform: scaleY(2);}
+    20%  { transform: scaleY(4);}
+    40%  { transform: scaleY(6);}
+    60%  { transform: scaleY(8);}
+    80% { transform: scaleY(10);}
+    100%  { transform: scaleY(12);}
+}
+
+@keyframes up {
+/*matrix(scaleX(),skewY(),skewX(),scaleY(),translateX(),translateY())*/
+
+0%   { transform: matrix(1,0,0,1,0,-1);}
+20%  { transform: matrix(1,0,0,3,0,-3);}
+40%  { transform: matrix(1,0,0,6,0,-6);}
+60%  { transform: matrix(1,0,0,9,0,-9);}
+80%  { transform: matrix(1,0,0,12,0,-12);}
+100% { transform: matrix(1,0,0,15,0,-15);}
 
 }
 
+#handle{
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: up 2s infinite  alternate linear;
+}
+
+
+
 #sun{
-    transform:scale(2, 2);
     transform-box: fill-box;
     transform-origin: center;
     animation: rotation2D;
