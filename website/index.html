@@ -79,7 +79,7 @@
 
 
   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<!-- Created with Inkscape (http://www.inkscape.org/) 
 
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -164,7 +164,9 @@
          inkscape:connector-curvature="0" />
     </g>
   </g>
-</svg>
+</svg>-->
+
+
 
   
     <!-- Toggler/collapsibe Button -->
@@ -273,10 +275,10 @@
 
     <button type="button" id="get" data-toggle="modal" disabled  class="btn btn-light btn-block">Get Data  <i class="fas fa-search-location"></i></button>
   </form>
-  <div id="accordion" class="mt-2">
-    <div class="card mb-2">
-      <div class="card-header">
-        <a class="card-link" data-toggle="collapse" href="#collapseOne">
+  <div id="accordion" class="mt-2" >
+    <div class="card mb-2" hidden>
+      <div class="card-header" >
+        <a class="card-link" data-toggle="collapse" href="#collapseOne"  >
           Current Weather / Time Machine
         </a>
       </div>
@@ -440,8 +442,8 @@
       </div>
     </div>
   
-    <div class="card mb-2">
-      <div class="card-header">
+    <div class="card mb-2" hidden >
+      <div class="card-header" disabled >
         <a class="collapsed card-link x" data-toggle="collapse" href="#collapseTwo">
           Daily Weather
         </a>
@@ -453,8 +455,8 @@
       </div>
     </div>
   
-    <div class="card mb-2">
-      <div class="card-header">
+    <div class="card mb-2" hidden >
+      <div class="card-header"  disabled>
         <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
           Hourly Weather
         </a>
@@ -466,15 +468,15 @@
       </div>
     </div>
 
-    <div class="card mb-2">
-      <div class="card-header">
+    <div class="card mb-2" hidden>
+      <div class="card-header" disabled >
         <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
           <ul class="list-group" id="miutly"> miutly Weather</ul>
         </a>
       </div>
       <div id="collapseThree" class="collapse" data-parent="#accordion">
         <div class="card-body">
-          Lorem ipsum..
+          
         </div>
       </div>
     </div>
