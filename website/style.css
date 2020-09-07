@@ -279,13 +279,29 @@ input[type=text]:focus {
 
 }
 
+@keyframes rotato {
+    
+    0%   { transform:rotate(0deg) ;}
+    20%  { transform:rotate(60deg) ;}
+    40%  { transform:rotate(120deg) ;}
+    60%  { transform:rotate(180deg) ;}
+    80%  { transform:rotate(240deg) ;}
+    100% { transform:rotate(300deg) ;}
+    
+    }
+
+.rotation{
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: rotato 2s infinite  alternate linear;
+}
+
+
 #handle{
     transform-box: fill-box;
     transform-origin: center;
     animation: up 2s infinite  alternate linear;
 }
-
-
 
 #sun{
     transform-box: fill-box;

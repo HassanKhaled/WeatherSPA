@@ -1376,7 +1376,12 @@ lonInput.value= position.coords.longitude;
  */
 getButton.addEventListener('click',() => {
 
-    if(apiKey.value!==''){
+
+
+
+
+
+    if(apiKey.value!==''&& requestSelect.value!==''){
       let x = document.querySelectorAll('input[type="text"]');
    
         for(i of x){
@@ -1439,10 +1444,50 @@ document.getElementById('setting').addEventListener('click', (e)=>{
 })
 
 
-requestSelect.addEventListener('change',(e)=>{
+returnCardIndexes = (index)=>{
 
-if(e.target.value!==''){
-    getButton.disabled =false;
+    const all = document.getElementsByClassName('card');
+    return all[index-1];
 }
 
-} )
+hideAllCards = () =>{
+    const cards = document.getElementsByClassName('card')
+    for(card of cards){
+        card.hidden=true;
+    }
+}
+
+showCardByIndex = (index)=>{
+    let temp = document.getElementsByClassName('card')[index-1];
+    if(temp===1){
+        returnCardIndexes(temp);
+        card.hidden=false;
+    }else if (temp===2){
+        returnCardIndexes(temp);
+        card.hidden=false;
+    }else if (temp===3){
+        returnCardIndexes(temp);
+        card.hidden=false;
+    }else if (temp===4){
+        returnCardIndexes(temp);
+        card.hidden=false;
+    }
+
+}
+
+
+requestSelect.addEventListener('change',(e)=>{
+ let temp = e.target.value;
+ let card = returnCardIndexes(temp);
+
+ hideAllCards();
+
+if(temp!==''){
+    getButton.disabled =false;
+    card.hidden=false;
+}
+
+showCardByIndex(temp);
+
+
+})
