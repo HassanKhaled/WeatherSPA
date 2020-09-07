@@ -1249,6 +1249,53 @@ openCollapseWithIndex =(index)=>{
     x[index].classList.add('show');
 }
 
+
+/**
+* @function  returnCardIndexes
+* @description return card by id from cards.
+* @param {number} index of card to be returned 
+*/
+returnCardIndexes = (index)=>{
+
+    const all = document.getElementsByClassName('card');
+    return all[index-1];
+}
+
+/**
+* @function  hideAllCards
+* @description hide all cards on the page.
+*/
+hideAllCards = () =>{
+    const cards = document.getElementsByClassName('card')
+    for(card of cards){
+        card.hidden=true;
+    }
+}
+
+/**
+* @function  showCardByIndex
+* @description show cards by index.
+* @param {number} index of the collapge to be shown
+*/
+showCardByIndex = (index)=>{
+    let temp = document.getElementsByClassName('card')[index-1];
+    if(temp===1){
+        returnCardIndexes(temp);
+        card.hidden=false;
+    }else if (temp===2){
+        returnCardIndexes(temp);
+        card.hidden=false;
+    }else if (temp===3){
+        returnCardIndexes(temp);
+        card.hidden=false;
+    }else if (temp===4){
+        returnCardIndexes(temp);
+        card.hidden=false;
+    }
+}
+
+
+
 /**
  * End Helper Functions
  * Begin Main Functions
@@ -1371,6 +1418,10 @@ lonInput.value= position.coords.longitude;
   }
 
 
+
+
+
+
 /**
  * @description Handle on get button click event
  */
@@ -1442,39 +1493,6 @@ document.getElementById('setting').addEventListener('click', (e)=>{
     e.preventDefault();
     
 })
-
-
-returnCardIndexes = (index)=>{
-
-    const all = document.getElementsByClassName('card');
-    return all[index-1];
-}
-
-hideAllCards = () =>{
-    const cards = document.getElementsByClassName('card')
-    for(card of cards){
-        card.hidden=true;
-    }
-}
-
-showCardByIndex = (index)=>{
-    let temp = document.getElementsByClassName('card')[index-1];
-    if(temp===1){
-        returnCardIndexes(temp);
-        card.hidden=false;
-    }else if (temp===2){
-        returnCardIndexes(temp);
-        card.hidden=false;
-    }else if (temp===3){
-        returnCardIndexes(temp);
-        card.hidden=false;
-    }else if (temp===4){
-        returnCardIndexes(temp);
-        card.hidden=false;
-    }
-
-}
-
 
 requestSelect.addEventListener('change',(e)=>{
  let temp = e.target.value;
