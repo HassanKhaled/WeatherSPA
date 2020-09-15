@@ -314,3 +314,12 @@ input[type=text]:focus {
     animation-direction: normal;
     animation-timing-function: linear;
 }
+
+.footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: var(--color-6);
+    background-color: var(--color-2);
+}
