@@ -16,6 +16,55 @@ const months= ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
 /** @constant
     @type {array}
     @global
+    @description Hold links' names and hrefs.
+*/
+const socialLinks = [ 
+    {href:"https://www.linkedin.com/in/hassankhaledabdelhady/",icons:["fab" ,"fa-linkedin", "fa-2x"]},
+    {href:"https://github.com/HassanKhaled",icons:["fab" ,"fa-github-square" ,"fa-2x"]},
+    {href:"https://twitter.com/hassan_k_a",icons:["fab", "fa-twitter-square", "fa-2x"]},
+    {href:"https://facebook.com/hassan.khaled.1414",icons:["fab" ,"fa-facebook-square" ,"fa-2x"]}];
+
+/** @constant
+@type {array}
+@global
+@description Hold links' names and hrefs.
+*/
+const projects = [ 
+{href:"https://github.com/HassanKhaled/WeatherSPA",text:"This Project"},
+{href:"https://github.com/HassanKhaled/tvGuide",text:"Tv Guide App "}];
+
+/** @constant
+@type {array}
+@global
+@description Hold links' names and hrefs.
+*/
+const apis = [ 
+{href:"https://openweathermap.org/",text:"Open Weather Maps"},
+{href:"https://openlayers.org/",text:"Open Layers"},
+{href:"https://www.countryflags.com/en/",text:"Country Flags"}];
+
+
+/** @constant
+@type {array}
+@global
+@description Hold links' names and hrefs.
+*/
+const stack = [ 
+{href:"https://www.w3schools.com/html/",text:"HTML"},
+{href:"https://www.w3schools.com/js/",text:"JavaScript"},
+{href:"https://www.w3schools.com/css/",text:"Css"}];
+
+/** @constant
+@type {array}
+@global
+@description Hold links' names and hrefs.
+*/
+const cert = [ 
+{href:"https://confirm.udacity.com/KKMLTGA4",text:"Web Development Professional"}];
+
+/** @constant
+    @type {array}
+    @global
     @description Hold languages' names.
 */
 const languages = [{value:'&lang=ar',text:'Arabic'}
@@ -607,6 +656,29 @@ getDataFromLocalStorage = (key)=>{
 */
 removeDataFromLocalStorage = (key)=>{ localStorage.removeItem(key);}
 
+/**
+* @function  fillFooterLinks
+* @description fill social media links section of the footer.
+* @param id for selecting the list to be filled 
+* @param list list to be filled in the list group
+* @param tag to be created and filled with link 
+* @param cls class to be added to the tag provided 
+*/
+fillFooterLinks=(id,list,tag,cls)=>{
+    
+    let  htmlElement = document.getElementById(id);
+   
+    for(item of list){
+        let innerHTMLElement =  document.createElement(tag);
+        innerHTMLElement.classList.add(cls);
+        let tempA =  document.createElement("a");
+        tempA.setAttribute("href",item.href);
+        tempA.innerHTML= item.text;
+        innerHTMLElement.appendChild(tempA);
+        htmlElement.appendChild(innerHTMLElement); 
+    }
+ 
+}
 
 /**
 * @function  start
@@ -620,6 +692,10 @@ start = () =>{
     fillSelect(requestSelect,requests);
     checkApiKeyIsSuppliedInCode();
     fillSelect(agoSelect,days);
+    fillFooterLinks("projects",projects,"li","list-group-item");
+    fillFooterLinks("apis",apis,"li","list-group-item");
+    fillFooterLinks("stack",stack,"li","list-group-item");
+    fillFooterLinks("cert",cert,"li","list-group-item");
     apiKey.value=getDataFromLocalStorage('api');
     getButton.disabled =true;
 }

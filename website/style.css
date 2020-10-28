@@ -354,3 +354,39 @@ a:hover{
     color: var(--color-6);
     text-decoration: none;
 }
+
+
+.list-group-item{
+    background: var(--color-2);
+    color: var(--color-5);
+    
+}
+
+
+
+.list-group-item.active{
+    background: var(--color-1);
+    color: var(--color-4);
+    border: none;
+}
+
+.list-group-item.active:hover{
+    background: var(--color-2);
+    color: var(--color-5);
+    border: none;
+}
+
+.list-group-flush > .list-group-item {
+    background-color: transparent;
+    border-bottom: none;
+    padding: 0px;
+ }
+ 
+
+ 
+ .bar{
+     background: var(--color-3);
+     width: 50px;
+     height: 5px;
+    
+ }
