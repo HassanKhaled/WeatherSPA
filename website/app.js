@@ -667,7 +667,7 @@ removeDataFromLocalStorage = (key)=>{ localStorage.removeItem(key);}
 fillFooterLinks=(id,list,tag,cls)=>{
     
     let  htmlElement = document.getElementById(id);
-   
+    let fragment =  new documentFragment();
     for(item of list){
         let innerHTMLElement =  document.createElement(tag);
         innerHTMLElement.classList.add(cls);
@@ -675,8 +675,10 @@ fillFooterLinks=(id,list,tag,cls)=>{
         tempA.setAttribute("href",item.href);
         tempA.innerHTML= item.text;
         innerHTMLElement.appendChild(tempA);
-        htmlElement.appendChild(innerHTMLElement); 
+        fragment.appendChild(innerHTMLElement); 
     }
+
+    htmlElement.appendChild(fragment); 
  
 }
 
