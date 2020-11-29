@@ -748,8 +748,7 @@ drawOpenLayersMapOnPage = coord =>{
     markers.addMarker(new OpenLayers.Marker(lonLat));
     map.setCenter (lonLat, zoom);}
     catch(error){
-        console.log('catch');
-        console.log(error);
+        console.error(error);
         showToastWithTitleAndMessageWithDelay("Error",error,3000);
     }
  
@@ -1423,7 +1422,7 @@ getWeatherDataFromOpenWeartherApiOneCall = async url => {
         }
         
     }catch(error){
-        console.log(error);
+         console.error(error);
         showToastWithTitleAndMessageWithDelay('Error',error,3000);
     }
 }
@@ -1463,6 +1462,7 @@ getWeatherDataFromOpenWeartherApi = async url => {
     
     }
     }catch(error){
+        console.error(error);
         showToastWithTitleAndMessageWithDelay('Error',error,3000);
     }
 }
