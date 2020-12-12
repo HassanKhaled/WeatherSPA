@@ -524,7 +524,10 @@ toggleTheme = () =>{
 * @description retrieves the theme from the local storage .
 */
 RetrieveTheme = () =>{
-    const theme = localStorage.getItem('theme')
+    var theme = localStorage.getItem('theme');
+    if(theme==="")
+        theme = "dark"
+    
     setTheme(theme);
 }
 
